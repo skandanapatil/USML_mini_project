@@ -208,9 +208,9 @@ def check_dbscan(orders, eps_km=0.6, min_samples=30):
 # Target mix of the lean catalog. Shares are renormalised if a category is
 # missing from your file.
 CATEGORY_SHARES = {
-    "Staples": 0.24, "Dairy & Bakery": 0.16, "Munchies & Snacks": 0.18,
+    "Staples": 0.23, "Dairy & Bakery": 0.16, "Munchies & Snacks": 0.18,
     "Beverages": 0.14, "Personal Care": 0.14, "Household": 0.08,
-    "Baby Care": 0.03, "Fresh": 0.02, "Eggs & Meat": 0.01,
+    "Baby Care": 0.03, "Fresh": 0.02, "Eggs & Meat": 0.01, "Frozen": 0.01,
 }
 
 # Seeded profit-margin range (%) by category. Everything stays inside 10-35.
@@ -218,6 +218,7 @@ MARGIN_RANGES = {
     "Staples": (10, 16), "Dairy & Bakery": (10, 16), "Fresh": (10, 18),
     "Eggs & Meat": (10, 16), "Beverages": (14, 24), "Munchies & Snacks": (18, 28),
     "Household": (18, 28), "Baby Care": (20, 30), "Personal Care": (25, 35),
+    "Frozen": (15, 25),
 }
 
 UNIT_MAP = {"g": "g", "gm": "g", "gms": "g", "gram": "g", "grams": "g",
@@ -283,6 +284,10 @@ def build_sku_master(bb_csv, n_skus, max_per_brand_sub, max_pack_base, seed):
     df = df.drop_duplicates(subset=["product", "brand"])
 
     df["qc_category"] = df["category"].map(map_category)
+    # BigBasket has no top-level Frozen category: frozen foods and ice cream sit under
+    # sub-categories such as "Frozen Veggies & Snacks" and "Ice Creams & Desserts".
+    is_frozen = df["sub_category"].str.contains("frozen|ice cream", case=False, na=False)
+    df.loc[is_frozen, "qc_category"] = "Frozen"
     dropped = df["qc_category"].isna().sum()
     df = df.dropna(subset=["qc_category"])
     print(f"[catalog] {len(df):,} rows after cleaning ({dropped:,} dropped as non-quick-commerce categories)")
@@ -302,8 +307,8 @@ def build_sku_master(bb_csv, n_skus, max_per_brand_sub, max_pack_base, seed):
     df["_brand_cnt"] = df.groupby("brand")["product"].transform("count")
     rating = pd.to_numeric(df["rating"], errors="coerce")
     df["_rating"] = rating.fillna(rating.median() if rating.notna().any() else 0)
-    df["_score"] = (0.6 * df["_brand_cnt"].rank(pct=True) + 0.4 * df["_rating"].rank(pct=True)
-                    + rng.uniform(0, 0.05, len(df)))
+    df["_pop"] = 0.6 * df["_brand_cnt"].rank(pct=True) + 0.4 * df["_rating"].rank(pct=True)
+    df["_score"] = df["_pop"] + rng.uniform(0, 0.05, len(df))
 
     avail = df["qc_category"].value_counts()
     shares = {c: s for c, s in CATEGORY_SHARES.items() if c in avail.index}
@@ -333,19 +338,28 @@ def build_sku_master(bb_csv, n_skus, max_per_brand_sub, max_pack_base, seed):
     lo_hi = out["qc_category"].map(MARGIN_RANGES)
     out["profit_margin_pct"] = [round(float(rng.uniform(lo, hi)), 1) for lo, hi in lo_hi]
 
+    # Pareto / ABC classification inside each category: the top 20% most popular SKUs are A
+    # (fast movers), the next 30% B, the rest C (long tail). Popularity is a proxy built from
+    # brand listing count and rating, because the BigBasket file has no sales data.
+    out["popularity_score"] = out["_pop"].round(4)
+    tie = rng.uniform(0, 1e-6, len(out))
+    rank_pct = (out["_pop"] + tie).groupby(out["qc_category"]).rank(pct=True, ascending=False)
+    out["abc_class"] = np.where(rank_pct <= 0.20, "A", np.where(rank_pct <= 0.50, "B", "C"))
+
     out = out.sort_values(["qc_category", "sub_category", "brand", "product"]).reset_index(drop=True)
     out["product_id"] = [f"SKU{i:05d}" for i in range(1, len(out) + 1)]
     out = out.rename(columns={"product": "product_name", "qc_category": "category_qc",
                               "category": "category_source", "sale_price": "price"})
     out["category"] = out["category_qc"]
     cols = ["product_id", "product_name", "category", "brand", "pack_size", "price",
-            "profit_margin_pct", "sub_category", "type", "market_price", "rating",
+            "profit_margin_pct", "popularity_score", "abc_class", "sub_category", "type", "market_price", "rating",
             "description", "category_source"]
     out = out[cols]
     print(f"[catalog] final: {len(out):,} SKUs, "
           f"{out['brand'].nunique():,} brands, pack size found for {out['pack_size'].notna().mean():.0%} "
           f"(BigBasket rarely states it; blank otherwise)")
     print(out["category"].value_counts().to_string())
+    print("[catalog] ABC classes:", out["abc_class"].value_counts().sort_index().to_dict())
     return out
 
 
