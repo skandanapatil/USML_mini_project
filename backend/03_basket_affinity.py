@@ -20,6 +20,8 @@ Instacart is US grocery data, so the logic transfers but not the product names.
 Say this in your write-up. Aisles are mapped to your categories in AISLE_TO_CATEGORY below.
 
 Outputs (in --out-dir, default data/)
+  baskets_sample.csv            real Instacart baskets as aisle:category items; module 5 draws
+                                its customer carts from these, so demand has real co-purchase structure
   rules_recipe_completion.csv   aisle-level rules
   rules_colocation.csv          category-level rules
   colocation_pairs.csv          one row per category pair, with a colocate flag
@@ -221,6 +223,7 @@ def main():
     ap.add_argument("--sample-orders", type=int, default=300000, help="0 = use all 3.2M prior orders (needs lots of RAM)")
     ap.add_argument("--chunk-rows", type=int, default=5_000_000)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--basket-sample", type=int, default=30000, help="baskets saved for module 5's demand generation")
     ap.add_argument("--min-support", type=float, default=0.01, help="aisle-level support")
     ap.add_argument("--min-confidence", type=float, default=0.25)
     ap.add_argument("--min-lift", type=float, default=1.5)
@@ -235,6 +238,14 @@ def main():
     unmapped = df["category"].isna().mean()
     print(f"[map] {1 - unmapped:.0%} of basket lines map to one of your categories "
           f"(alcohol, pets, other and missing are left out)")
+
+    # real baskets for demand generation in module 5
+    bs = df.dropna(subset=["category"]).drop_duplicates(["order_id", "aisle"]).copy()
+    bs["item"] = bs["aisle"] + ":" + bs["category"]
+    items = bs.groupby("order_id")["item"].agg("|".join)
+    items = items.sample(n=min(a.basket_sample, len(items)), random_state=a.seed)
+    items.rename("items").reset_index(drop=True).to_frame().to_csv(out / "baskets_sample.csv", index=False)
+    print(f"[write] baskets_sample.csv: {len(items):,} real baskets")
 
     # A. recipe completion (aisle level)
     XA, aisles = to_matrix(ids, df, "aisle")

@@ -20,6 +20,12 @@ Outputs (in --data-dir)
   (columns: target_product_id, rank, substitute_product_id, similarity_score,
    margin_weight, final_score, price_ratio, same_brand, plus readable names)
 
+Validation (--evaluate, on by default)
+  A retrieval test with no label leakage: SKUs are re-vectorised from name, brand and
+  description ONLY (the sub-category text is left out), and for every SKU we check whether its
+  nearest neighbours share its true sub-category. This measures how well the similarity engine
+  recovers product families; it is not the same as customer acceptance, which needs real data.
+
 Use it in code (the stock-out lookup)
   import importlib   # file name starts with a digit, so use import_module
   m = importlib.import_module("02_substitution_engine")
@@ -95,6 +101,24 @@ def build_matrix(sku, top_k, alpha, min_sim, price_lo, price_hi, min_candidates)
     return out
 
 
+def evaluate_similarity(sku, ks=(1, 3, 5)):
+    """precision@k of 'neighbour is in the same sub-category', using text WITHOUT the sub-category."""
+    if "sub_category" not in sku.columns:
+        return {}
+    col = lambda c: sku[c].fillna("").astype(str) if c in sku.columns else pd.Series([""] * len(sku), index=sku.index)
+    text = (col("product_name") + " ") * 3 + col("brand") + " " + col("description").str.slice(0, 300)
+    X = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), min_df=2, sublinear_tf=True).fit_transform(text)
+    sim = (X @ X.T).toarray()
+    np.fill_diagonal(sim, -1)
+    top = np.argsort(-sim, axis=1)[:, :max(ks)]
+    sub = sku["sub_category"].fillna("General").to_numpy()
+    sizes = pd.Series(sub).value_counts()
+    ok = sku.index[sizes.reindex(sub).to_numpy() > 1]            # SKUs whose sub-category has other members
+    res = {f"precision_at_{k}": float(np.mean([(sub[top[i, :k]] == sub[i]).mean() for i in ok])) for k in ks}
+    res["random_baseline_at_1"] = float(((sizes - 1) / (len(sku) - 1) * sizes / len(sku)).sum())
+    return res
+
+
 class SubstitutionEngine:
     """Instant stock-out lookup over the pre-computed matrix."""
 
@@ -122,6 +146,7 @@ def main():
                     help="substitute price as a multiple of the original")
     ap.add_argument("--min-candidates", type=int, default=3)
     ap.add_argument("--demo", action="store_true", help="print a few stock-out examples")
+    ap.add_argument("--no-evaluate", action="store_true", help="skip the precision@k validation")
     a = ap.parse_args()
 
     data = Path(a.data_dir)
@@ -139,6 +164,14 @@ def main():
     print(f"[matrix] rank-1 substitutes: mean similarity {top1['similarity_score'].mean():.2f}, "
           f"same brand {top1['same_brand'].mean():.0%}, mean margin weight {top1['margin_weight'].mean():.2f}")
     print(f"[write] {data / 'substitution_matrix.csv'}")
+
+    if not a.no_evaluate:
+        ev = evaluate_similarity(sku)
+        if ev:
+            print(f"[validate] same-sub-category precision (name/brand/description only): "
+                  f"P@1 {ev['precision_at_1']:.0%}, P@3 {ev['precision_at_3']:.0%}, P@5 {ev['precision_at_5']:.0%} "
+                  f"(random guessing would give {ev['random_baseline_at_1']:.0%})")
+            pd.Series(ev).to_csv(data / "substitution_validation.csv", header=["value"])
 
     if a.demo:
         eng = SubstitutionEngine(data / "substitution_matrix.csv")

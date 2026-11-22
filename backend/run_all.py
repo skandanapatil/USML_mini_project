@@ -7,14 +7,16 @@ run_all.py - runs the whole mini-project pipeline in order.
   3. 02_substitution_engine.py    TF-IDF substitution matrix
   4. 03_basket_affinity.py        Apriori recipe-completion and co-location rules (Instacart)
   5. 04_hub_rerouting.py          gridlock rerouting + stock-out healing demo
-  6. 05_sla_simulation.py         SLA timer, micro-batching, baseline vs self-healing
+  6. 05_sla_simulation.py         one scenario: SLA timer, batching, pricing, baseline vs self-healing
+  7. 06_experiments.py            stress ladder with 10 random seeds, confidence intervals, PDF summary
+                                  (opt-in: python run_all.py --with-experiments; takes several minutes)
 
 Put this file in the same folder as the other scripts. File locations are set at the top
 of each script (RAW_DIR); nothing else needs to be typed.
 
 Usage
   python run_all.py                       # everything
-  python run_all.py --skip basket         # leave out a step (names: prep, cluster, subs, basket, reroute, sla)
+  python run_all.py --skip basket         # leave out a step (names: prep, cluster, subs, basket, reroute, sla, experiments)
   python run_all.py --only reroute sla    # run just these steps (the earlier steps must have run before)
   python run_all.py --keep-going          # do not stop if a step fails
 
@@ -35,7 +37,9 @@ STEPS = [
     ("basket",  "03_basket_affinity.py",      ["--demo"]),
     ("reroute", "04_hub_rerouting.py",        []),
     ("sla",     "05_sla_simulation.py",       []),
+    ("experiments", "06_experiments.py",      []),
 ]
+OPT_IN = {"experiments"}
 
 
 def main():
@@ -43,11 +47,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--skip", nargs="*", default=[], choices=names, help="steps to leave out")
     ap.add_argument("--only", nargs="*", default=[], choices=names, help="run only these steps")
+    ap.add_argument("--with-experiments", action="store_true", help="also run the 10-seed stress ladder (step 7)")
     ap.add_argument("--keep-going", action="store_true", help="continue after a failed step")
     ap.add_argument("--quiet", action="store_true", help="hide each step's output (show only the status lines)")
     a = ap.parse_args()
 
-    todo = [s for s in STEPS if (not a.only or s[0] in a.only) and s[0] not in a.skip]
+    todo = [s for s in STEPS if (not a.only or s[0] in a.only) and s[0] not in a.skip
+            and (s[0] not in OPT_IN or a.with_experiments or s[0] in a.only)]
     results = []
     t_all = time.time()
     for i, (name, script, extra) in enumerate(todo, 1):

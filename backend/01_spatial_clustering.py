@@ -17,9 +17,10 @@ Steps
      demand is highest, so a gridlocked or overloaded hub has a close backup (module 4 reroutes
      to it) without shrinking DBSCAN's neighbourhood everywhere.
   3. Coverage: every micro-hub gets a coverage radius (90th percentile distance of
-     its orders), a coverage circle at --coverage-km (default 2 km, roughly a
-     5-minute ride) and a convex "demand hull". These are APPROXIMATE isochrones
-     built from straight-line distance, not road-network travel time.
+     its orders), a coverage circle at --coverage-km ROAD km (default 2 km, roughly a
+     6-minute ride at 20 km/h) and a convex "demand hull". Road distance = straight-line
+     distance x --circuity (default 1.4), so 2 road km is a circle of about 1.4 km radius on
+     the map. These are APPROXIMATE isochrones, not road-network travel times.
 
 Outputs (in --out-dir, default data/)
   hubs_macro.csv, hubs_micro.csv, orders_clustered.csv, hubs.geojson,
@@ -163,7 +164,8 @@ def main():
     ap.add_argument("--max-hub-orders", type=int, default=-1,
                     help="split any dense pocket with more orders than this into neighbouring hubs "
                          "(-1 = auto: 6.25%% of all orders, 0 = off)")
-    ap.add_argument("--coverage-km", type=float, default=2.0, help="micro-hub delivery radius (about 5 min)")
+    ap.add_argument("--coverage-km", type=float, default=2.0, help="micro-hub delivery radius in ROAD km (about 6 min)")
+    ap.add_argument("--circuity", type=float, default=1.4, help="road km per straight-line km")
     ap.add_argument("--rdc-radius-km", type=float, default=5.0, help="max micro-hub distance from its RDC to flag")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--plot", action="store_true")
@@ -199,7 +201,8 @@ def main():
     micro["within_rdc_radius"] = micro["dist_to_rdc_km"] <= a.rdc_radius_km
 
     # 3. assign every order to its nearest micro-hub, test coverage
-    d_all = np.column_stack([haversine_km(orders["lat"].to_numpy(), orders["lon"].to_numpy(), h.lat, h.lon)
+    # road distance = straight line x circuity
+    d_all = a.circuity * np.column_stack([haversine_km(orders["lat"].to_numpy(), orders["lon"].to_numpy(), h.lat, h.lon)
                              for h in micro.itertuples()])
     nearest = d_all.argmin(axis=1)
     dist = d_all[np.arange(len(orders)), nearest]
@@ -222,8 +225,9 @@ def main():
         feats.append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [h.lon, h.lat]},
                       "properties": {**props, "kind": "micro_hub", "orders_served": n_served[-1]}})
         feats.append({"type": "Feature", "geometry": {"type": "Polygon",
-                      "coordinates": circle_polygon(h.lat, h.lon, a.coverage_km)},
-                      "properties": {**props, "kind": "coverage_circle", "radius_km": a.coverage_km}})
+                      "coordinates": circle_polygon(h.lat, h.lon, a.coverage_km / a.circuity)},
+                      "properties": {**props, "kind": "coverage_circle", "road_radius_km": a.coverage_km,
+                                     "map_radius_km": round(a.coverage_km / a.circuity, 2)}})
         if hull:
             feats.append({"type": "Feature", "geometry": {"type": "Polygon", "coordinates": hull[0]},
                           "properties": {**props, "kind": "demand_hull"}})
@@ -244,7 +248,7 @@ def main():
 
     summary = {
         "n_orders": int(len(orders)), "k_rdc": int(k), "silhouette_by_k": scores,
-        "n_micro_hubs": int(len(micro)), "coverage_km": a.coverage_km,
+        "n_micro_hubs": int(len(micro)), "coverage_road_km": a.coverage_km, "circuity": a.circuity,
         "pct_orders_served": round(float(served.mean()) * 100, 1),
         "micro_hubs_outside_rdc_radius": int((~micro["within_rdc_radius"]).sum()),
         "dbscan": {"eps_km": a.eps_km, "min_samples": a.min_samples},
@@ -268,14 +272,15 @@ def main():
         ax.scatter(orders["lon"], orders["lat"], c=rdc_assign, cmap="tab10", s=3, alpha=.35)
         for h in micro.itertuples():
             ang = np.linspace(0, 2 * np.pi, 80)
-            ax.plot(h.lon + a.coverage_km / (111.32 * np.cos(np.radians(h.lat))) * np.cos(ang),
-                    h.lat + a.coverage_km / 110.574 * np.sin(ang), color="#0F6E56", lw=1)
+            rr = a.coverage_km / a.circuity
+            ax.plot(h.lon + rr / (111.32 * np.cos(np.radians(h.lat))) * np.cos(ang),
+                    h.lat + rr / 110.574 * np.sin(ang), color="#0F6E56", lw=1)
             ax.scatter(h.lon, h.lat, marker="o", s=40, c="#0F6E56", edgecolor="white", zorder=3)
         ax.scatter(macro["lon"], macro["lat"], marker="s", s=140, c="#534AB7", edgecolor="white", zorder=4)
         for r in macro.itertuples():
             ax.annotate(r.rdc_id, (r.lon, r.lat), xytext=(6, 6), textcoords="offset points", fontsize=9, weight="bold")
         ax.set_xlabel("longitude"); ax.set_ylabel("latitude")
-        ax.set_title(f"{k} RDCs, {len(micro)} micro-hubs, {a.coverage_km:g} km coverage circles")
+        ax.set_title(f"{k} RDCs, {len(micro)} micro-hubs, {a.coverage_km:g} road-km coverage circles")
         ax.set_aspect(1 / np.cos(np.radians(orders["lat"].mean())))
         fig.savefig(out / "cluster_map.png", dpi=150, bbox_inches="tight")
         print(f"[plot] wrote {out / 'cluster_map.png'}")
