@@ -627,7 +627,7 @@ def main():
     ap.add_argument("--p2p-min-units", type=int, default=50, help="smallest load worth a P2P van trip")
     ap.add_argument("--truck-min-gap", type=float, default=60.0, help="minutes between RDC trucks to the same hub")
     ap.add_argument("--addon-accept", type=float, default=0.20, help="share of customers who accept a recipe add-on (0 = off)")
-    ap.add_argument("--sweep", action="store_true", help="also sweep Green adoption 0-100%")
+    ap.add_argument("--sweep", action="store_true", help="also sweep Green adoption 0-100%%")
     ap.add_argument("--resilience", action="store_true", help="gridlock each hub in turn and measure how well neighbours cover for it")
     ap.add_argument("--seed", type=int, default=42)
     cfg = ap.parse_args()
