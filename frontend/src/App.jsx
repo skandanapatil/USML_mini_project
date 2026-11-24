@@ -1,744 +1,658 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Papa from "papaparse";
+import { MapContainer, TileLayer, CircleMarker, Rectangle, Polygon, Polyline, Tooltip, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip as ChartTooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-const EMPTY_DASHBOARD = {
-  generated: {},
-  metrics: {},
-  hubs: [],
-  rdcs: [],
-  orders: [],
-  tiers: [],
-  alerts: [],
-  experiments: [],
-  basket: {},
+const DATA = "/data/";
+const COLORS = {
+  bg: "#0B1220",
+  panel: "#111A2B",
+  teal: "#14B8A6",
+  purple: "#8B5CF6",
+  amber: "#F59E0B",
+  green: "#22C55E",
+  red: "#EF4444",
+  blue: "#3B82F6",
 };
 
-const NAV_ITEMS = ["Overview", "Network", "Service & SLA", "Playback"];
-
-function Icon({ name, size = 16 }) {
-  const paths = {
-    grid: <><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></>,
-    map: <><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z" /><path d="M9 3v15m6-12v15" /></>,
-    chart: <><path d="M3 3v18h18" /><path d="m8 14 4-4 3 3 5-7" /></>,
-    clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
-    play: <path d="m8 5 12 7-12 7z" />,
-    refresh: <><path d="M20 7v5h-5" /><path d="M4 17v-5h5" /><path d="M5.6 9a7 7 0 0 1 11.6-2L20 12M4 12l2.8 5a7 7 0 0 0 11.6-2" /></>,
-    alert: <><path d="M12 3 2.8 19h18.4L12 3Z" /><path d="M12 9v4m0 3h.01" /></>,
-    arrow: <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>,
-    box: <><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="M3 8v9l9 5 9-5V8m-9 5v9" /></>,
-    close: <><path d="m18 6-12 12M6 6l12 12" /></>,
-    pin: <><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2" /></>,
-    check: <path d="m5 12 4 4L19 6" />,
-    up: <><path d="m5 15 7-7 7 7" /></>,
-    pulse: <path d="M3 12h4l3-8 4 16 3-8h4" />,
-  };
-  return (
-    <svg
-      aria-hidden="true"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      {paths[name] || paths.grid}
-    </svg>
-  );
+function csv(path) {
+  return fetch(DATA + path).then((response) => {
+    if (!response.ok) throw new Error(`Unable to load ${path}`);
+    return response.text();
+  }).then((text) => Papa.parse(text, { header: true, dynamicTyping: true, skipEmptyLines: true }).data);
 }
 
-function fmt(value, digits = 0) {
-  if (value === undefined || value === null || value === "" || !Number.isFinite(Number(value))) return "--";
-  return Number(value).toLocaleString("en-IN", {
+function timeToMinutes(value) {
+  if (typeof value === "number") return value;
+  if (!value) return 0;
+  const [h, m, s = 0] = value.split(":").map(Number);
+  return h * 60 + m + s / 60;
+}
+
+function formatTime(minutes) {
+  const total = Math.max(0, Math.round(minutes));
+  return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+}
+
+function formatNumber(value, digits = 1) {
+  return Number(value ?? 0).toLocaleString("en-IN", {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   });
 }
 
-function metricValue(metrics, key) {
-  return metrics?.self_healing?.[key];
+function FitBounds({ points }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!points?.length) return;
+    const bounds = points.map(([lat, lon]) => [lat, lon]);
+    map.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 });
+  }, [map, points]);
+  return null;
 }
 
-function statusLabel(status) {
-  if (status?.running) return status.stage || "Running";
-  if (status?.error) return "Needs attention";
-  return "Ready";
+function Icon({ name }) {
+  const icons = { map: "⌖", chart: "▥", clock: "◷", shield: "◆", grid: "▦", info: "i" };
+  return <span className="icon" aria-hidden="true">{icons[name] || "·"}</span>;
 }
 
-async function request(path, options) {
-  const response = await fetch(path, options);
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`);
-  return data;
-}
-
-function Header({ active, onNavigate, apiOnline, busy, onOpenRun }) {
+function Header({ page, setPage }) {
+  const pages = [
+    ["map", "Control map", "map"],
+    ["consolidation", "Consolidation", "shield"],
+    ["inventory", "RDC inventory", "grid"],
+    ["stress", "Stress tests", "chart"],
+    ["playback", "Playback", "clock"],
+  ];
   return (
     <header className="topbar">
-      <a className="brand" href="#" onClick={(event) => event.preventDefault()}>
-        <span className="brand-mark"><Icon name="pulse" size={18} /></span>
-        <span className="brand-copy">
-          <strong>SCM<span>.</span></strong>
-          <small>COMMAND CENTER</small>
-        </span>
-      </a>
-      <nav className="main-nav" aria-label="Main navigation">
-        {NAV_ITEMS.map((item, index) => (
-          <button
-            className={`nav-item ${active === item ? "active" : ""}`}
-            key={item}
-            onClick={() => onNavigate(item)}
-          >
-            <Icon name={["grid", "map", "chart", "clock"][index]} size={15} />
-            {item}
+      <button className="brand" onClick={() => setPage("map")}>
+        <span className="brand-mark"><Icon name="shield" /></span>
+        <span><strong>SCM<span>.</span></strong><small>COMMAND CENTER</small></span>
+      </button>
+      <nav>
+        {pages.map(([id, label, icon]) => (
+          <button key={id} className={page === id ? "active" : ""} onClick={() => setPage(id)}>
+            <Icon name={icon} />{label}
           </button>
         ))}
       </nav>
-      <div className="top-actions">
-        <span className={`connection ${apiOnline ? "online" : "offline"}`}>
-          <i />
-          {apiOnline ? "ENGINE CONNECTED" : "ENGINE OFFLINE"}
-        </span>
-        <button className="button button-primary header-run" onClick={onOpenRun} disabled={busy}>
-          <Icon name={busy ? "refresh" : "play"} size={14} />
-          {busy ? "Running..." : "Run scenario"}
-        </button>
-      </div>
+      <div className="live-state"><i /> STATIC SCENARIO</div>
     </header>
   );
 }
 
-function SectionHeading({ eyebrow, title, action }) {
+function SectionHeading({ eyebrow, title, aside }) {
   return (
     <div className="section-heading">
-      <div>
-        {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-        <h2>{title}</h2>
-      </div>
-      {action}
+      <div><span>{eyebrow}</span><h2>{title}</h2></div>
+      {aside}
     </div>
   );
 }
 
-function StatCard({ label, value, suffix, sub, icon, tone = "mint" }) {
-  return (
-    <article className="stat-card">
-      <div className={`stat-icon ${tone}`}><Icon name={icon} size={16} /></div>
-      <div className="stat-label">{label}</div>
-      <div className="stat-number">{value}<span>{suffix}</span></div>
-      <div className="stat-sub">{sub}</div>
-    </article>
+function ControlMap({ data, clock, setClock }) {
+  const [rdcId, setRdcId] = useState(null);
+  const [hubId, setHubId] = useState(null);
+  const [activeStage, setActiveStage] = useState("detect");
+  const [showHulls, setShowHulls] = useState(false);
+  const hubs = data.hubs || [];
+  const rdcs = data.rdcs || [];
+  const geo = data.geojson;
+  const hubLookup = Object.fromEntries(hubs.map((hub) => [hub.hub_id, hub]));
+  const features = geo?.features || [];
+  const microFeatures = features.filter((feature) => feature.properties?.kind === "micro_hub");
+  const rdcFeatures = features.filter((feature) => feature.properties?.kind === "rdc");
+  const hullFeatures = features.filter((feature) => feature.properties?.kind === "demand_hull");
+  const circles = features.filter((feature) => feature.properties?.kind === "coverage_circle");
+  const visibleHubs = useMemo(() => rdcId ? hubs.filter((hub) => hub.rdc_id === rdcId) : hubs, [hubs, rdcId]);
+  const points = useMemo(() => visibleHubs.map((hub) => [Number(hub.lat), Number(hub.lon)]), [visibleHubs]);
+  const visibleHubIds = new Set(visibleHubs.map((hub) => hub.hub_id));
+  const visibleMicroFeatures = microFeatures.filter((feature) => visibleHubIds.has(feature.properties.hub_id));
+  const visibleHulls = hullFeatures.filter((feature) => !rdcId || hubLookup[feature.properties.hub_id]?.rdc_id === rdcId);
+  const visibleCircles = circles.filter((feature) => !rdcId || hubLookup[feature.properties.hub_id]?.rdc_id === rdcId);
+  const reroutes = (data.orders || []).filter((order) =>
+    order.mode === "self_healing" &&
+    order.reroute === "rerouted_gridlock" &&
+    Number(order.t) <= clock &&
+    (!rdcId || visibleHubIds.has(order.hub) || visibleHubIds.has(order.home_hub))
   );
-}
-
-function NetworkMap({ hubs, rdcs, selectedHub, onSelectHub, generated }) {
-  const bounds = useMemo(() => {
-    const points = [...hubs, ...rdcs].filter((point) => Number.isFinite(Number(point.lat)) && Number.isFinite(Number(point.lon)));
-    if (!points.length) return null;
-    const lats = points.map((point) => Number(point.lat));
-    const lons = points.map((point) => Number(point.lon));
-    const latPad = Math.max((Math.max(...lats) - Math.min(...lats)) * 0.18, 0.012);
-    const lonPad = Math.max((Math.max(...lons) - Math.min(...lons)) * 0.18, 0.012);
-    return {
-      minLat: Math.min(...lats) - latPad,
-      maxLat: Math.max(...lats) + latPad,
-      minLon: Math.min(...lons) - lonPad,
-      maxLon: Math.max(...lons) + lonPad,
-    };
-  }, [hubs, rdcs]);
-
-  const project = (point) => ({
-    x: 38 + ((Number(point.lon) - bounds.minLon) / (bounds.maxLon - bounds.minLon)) * 624,
-    y: 30 + ((bounds.maxLat - Number(point.lat)) / (bounds.maxLat - bounds.minLat)) * 300,
-  });
-
-  const links = useMemo(() => {
-    if (!bounds || hubs.length < 2) return [];
-    const edges = new Map();
-    hubs.forEach((hub, index) => {
-      const nearest = hubs
-        .map((other, otherIndex) => {
-          if (otherIndex === index) return null;
-          const dy = Number(hub.lat) - Number(other.lat);
-          const dx = (Number(hub.lon) - Number(other.lon)) * Math.cos((Number(hub.lat) * Math.PI) / 180);
-          return { otherIndex, distance: dx * dx + dy * dy };
-        })
-        .filter(Boolean)
-        .sort((a, b) => a.distance - b.distance)[0];
-      if (!nearest) return;
-      const key = [index, nearest.otherIndex].sort((a, b) => a - b).join("-");
-      edges.set(key, [hubs[index], hubs[nearest.otherIndex]]);
-    });
-    return Array.from(edges.values());
-  }, [bounds, hubs]);
-
-  const selected = hubs.find((hub) => hub.hub_id === selectedHub);
+  const occurredAlerts = (data.alerts || [])
+    .filter((alert) => timeToMinutes(alert.time) <= clock)
+    .sort((a, b) => timeToMinutes(b.time) - timeToMinutes(a.time));
+  const occurredTrucks = (data.trucks || []).filter((truck) =>
+    truck.mode === "self_healing" &&
+    timeToMinutes(truck.departs) <= clock &&
+    (!rdcId || visibleHubIds.has(truck.hub_id))
+  );
+  const occurredTransfers = (data.transfers || []).filter((transfer) =>
+    timeToMinutes(transfer.triggered_at) <= clock &&
+    (!rdcId || visibleHubIds.has(transfer.donor_hub) || visibleHubIds.has(transfer.receiver_hub))
+  );
+  const activeGridlock = clock >= 1155 && clock <= 1185;
+  const rdcColors = ["#8B5CF6", "#60A5FA", "#F472B6", "#F59E0B", "#22C55E"];
+  const selectRdc = (id) => {
+    setRdcId(rdcId === id ? null : id);
+    setHubId(null);
+  };
+  const stageContent = {
+    detect: occurredAlerts.slice(0, 3).map((alert) => `${alert.time} · ${alert.message || alert.type}`),
+    decide: [
+      ...reroutes.slice(0, 2).map((order) => `${order.order_id} · gridlock reroute to ${order.hub}`),
+      ...(data.alerts || [])
+        .filter((alert) =>
+          timeToMinutes(alert.time) <= clock &&
+          ["STOCKOUT_SUBSTITUTE", "STOCKOUT_SOURCING", "ITEM_DROPPED_BY_PREFERENCE"].includes(alert.type)
+        )
+        .slice(0, 2)
+        .map((alert) => `${alert.time} · ${alert.message}`),
+    ],
+    act: [
+      ...occurredTransfers.slice(-2).map((transfer) => `${transfer.transfer_id} · ${transfer.donor_hub} → ${transfer.receiver_hub}`),
+      ...occurredTrucks.slice(-2).map((truck) => `${truck.wave_id} · RDC → ${truck.hub_id}`),
+    ],
+    measure: [
+      `Promised SLA met · ${formatNumber(data.summary?.sla_met_pct?.self_healing)}%`,
+      `P90 delivery · ${formatNumber(data.summary?.p90_delivery_min?.self_healing)} min`,
+      `Cancelled orders · ${formatNumber(data.summary?.orders_cancelled_pct?.self_healing)}%`,
+    ],
+  };
+  const stageEmpty = {
+    detect: "No alerts have occurred by this time. Advance the clock in Playback to see events.",
+    decide: "No reroutes or stock-out decisions have occurred by this time.",
+    act: "No transfers or trucks have departed by this time.",
+    measure: "Simulation metrics are unavailable.",
+  };
 
   return (
-    <section className="panel map-panel">
-      <SectionHeading
-        eyebrow="BENGALURU · NETWORK OVERVIEW"
-        title="Micro-hub control map"
-        action={<span className="map-legend"><i className="legend-dot rdc" />RDC <i className="legend-dot hub" />Micro-hub</span>}
-      />
-      {bounds ? (
-        <>
-          <div className="map-canvas">
-            <svg viewBox="0 0 700 360" role="img" aria-label="Schematic map of the generated Bangalore hub network">
-              <defs>
-                <pattern id="map-grid" width="36" height="36" patternUnits="userSpaceOnUse">
-                  <path d="M 36 0 L 0 0 0 36" fill="none" stroke="rgba(164,184,199,.065)" strokeWidth="1" />
-                </pattern>
-                <radialGradient id="map-glow">
-                  <stop offset="0" stopColor="#0d3a38" stopOpacity=".38" />
-                  <stop offset="1" stopColor="#0b1018" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-              <rect width="700" height="360" fill="url(#map-grid)" />
-              <ellipse cx="350" cy="180" rx="270" ry="155" fill="url(#map-glow)" />
-              <path className="road road-major" d="M33 292 C130 245 157 166 248 146 S384 175 467 109 582 80 668 37" />
-              <path className="road" d="M47 48 C143 123 172 226 257 275 S422 294 493 224 599 178 668 213" />
-              <path className="road" d="M111 344 C164 265 249 251 294 174 S364 50 444 37" />
-              <path className="road road-dash" d="M36 189 C140 205 201 78 310 86 S472 210 659 137" />
-              {links.map(([from, to], index) => {
-                const a = project(from);
-                const b = project(to);
-                return <line key={`link-${index}`} className="hub-link" x1={a.x} y1={a.y} x2={b.x} y2={b.y} />;
-              })}
-              {hubs.map((hub) => {
-                const point = project(hub);
-                const selectedClass = selectedHub === hub.hub_id ? " selected" : "";
-                return (
-                  <g
-                    className={`hub-marker${selectedClass}`}
-                    key={hub.hub_id}
-                    onClick={() => onSelectHub(hub.hub_id)}
-                    onKeyDown={(event) => event.key === "Enter" && onSelectHub(hub.hub_id)}
-                    role="button"
-                    tabIndex="0"
-                    aria-label={`${hub.hub_id}, ${hub.nearest_area || "Bengaluru"}`}
-                  >
-                    <circle className="hub-halo" cx={point.x} cy={point.y} r="12" />
-                    <circle className="hub-dot" cx={point.x} cy={point.y} r="4.3" />
-                    <text x={point.x + 8} y={point.y - 7}>{hub.hub_id}</text>
-                  </g>
-                );
-              })}
-              {rdcs.map((rdc) => {
-                const point = project(rdc);
-                return (
-                  <g key={rdc.rdc_id} className="rdc-marker">
-                    <rect x={point.x - 5} y={point.y - 5} width="10" height="10" rx="2" />
-                    <text x={point.x + 9} y={point.y + 3}>{rdc.rdc_id}</text>
-                  </g>
-                );
-              })}
-              <text className="map-label" x="30" y="343">BENGALURU · SCHEMATIC ROAD NETWORK</text>
-              <text className="map-label map-label-right" x="665" y="343" textAnchor="end">NOT TO SCALE</text>
-            </svg>
-            {selected && (
-              <div className="map-tooltip">
-                <span className="tooltip-dot" />
-                <div><strong>{selected.hub_id}</strong><small>{selected.nearest_area || "Micro-hub"} · {selected.rdc_id || "Network"}</small></div>
-                <button aria-label="Close hub details" onClick={() => onSelectHub(null)}><Icon name="close" size={13} /></button>
-              </div>
+    <section className="control-layout">
+      <div className="panel map-panel">
+        <SectionHeading
+          eyebrow="BENGALURU · NETWORK OVERVIEW"
+          title="Micro-hub control map"
+          aside={
+            <div className="map-controls">
+              <label className="rdc-filter">RDC
+                <select value={rdcId || ""} onChange={(event) => selectRdc(event.target.value || null)}>
+                  <option value="">All</option>
+                  {rdcs.map((rdc) => <option key={rdc.rdc_id} value={rdc.rdc_id}>{rdc.rdc_id}</option>)}
+                </select>
+              </label>
+              <label className="toggle"><input type="checkbox" checked={showHulls} onChange={(event) => setShowHulls(event.target.checked)} />Demand hulls</label>
+            </div>
+          }
+        />
+        <div className="network-chips">
+          <span><b>{data.cluster?.k_rdc ?? rdcs.length}</b> RDCs</span>
+          <span><b>{data.cluster?.n_micro_hubs ?? hubs.length}</b> Hubs</span>
+          <span><b>{formatNumber(data.cluster?.pct_orders_served, 1)}%</b> within 2 km</span>
+          {rdcId && <button className="filter-chip" onClick={() => selectRdc(rdcId)}>{rdcId} · Show all</button>}
+        </div>
+        <div className="map-canvas">
+          <MapContainer center={[12.95, 77.62]} zoom={11} zoomControl={false}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {points.length > 0 && <FitBounds points={points} />}
+            {showHulls && visibleHulls.map((feature, index) => (
+              <Polygon
+                key={`hull-${index}`}
+                positions={feature.geometry.coordinates[0].map(([lon, lat]) => [lat, lon])}
+                pathOptions={{ color: "#64748B", weight: 1, dashArray: "5 5", fillOpacity: 0.04 }}
+              />
+            ))}
+            {visibleMicroFeatures.map((feature) => {
+              const [lon, lat] = feature.geometry.coordinates;
+              const hub = hubLookup[feature.properties.hub_id] || {};
+              const rdcIndex = rdcs.findIndex((rdc) => rdc.rdc_id === hub.rdc_id);
+              const selected = hubId === feature.properties.hub_id;
+              return (
+                <CircleMarker
+                  key={feature.properties.hub_id}
+                  center={[lat, lon]}
+                  radius={selected ? 8 : 5}
+                  pathOptions={{ color: rdcIndex >= 0 ? rdcColors[rdcIndex % rdcColors.length] : COLORS.teal, fillColor: COLORS.teal, fillOpacity: 0.9, weight: 2 }}
+                  eventHandlers={{ click: () => setHubId(feature.properties.hub_id) }}
+                >
+                  <Tooltip direction="top" offset={[0, -5]}>
+                    <strong>{feature.properties.hub_id}</strong><br />
+                    {feature.properties.nearest_area}<br />
+                    {feature.properties.orders_served} orders
+                  </Tooltip>
+                </CircleMarker>
+              );
+            })}
+            {rdcFeatures.map((feature) => {
+              const [lon, lat] = feature.geometry.coordinates;
+              return (
+                <Rectangle
+                  key={feature.properties.rdc_id}
+                  bounds={[[lat - 0.008, lon - 0.008], [lat + 0.008, lon + 0.008]]}
+                  pathOptions={{
+                    color: COLORS.purple,
+                    fillColor: COLORS.purple,
+                    fillOpacity: rdcId === feature.properties.rdc_id ? 1 : 0.9,
+                    weight: rdcId === feature.properties.rdc_id ? 4 : 2,
+                  }}
+                  eventHandlers={{ click: () => selectRdc(feature.properties.rdc_id) }}
+                >
+                  <Tooltip>{feature.properties.rdc_id}<br />{feature.properties.nearest_area}<br />{feature.properties.n_orders} orders</Tooltip>
+                </Rectangle>
+              );
+            })}
+            {visibleCircles.map((feature) => {
+              const [lon, lat] = feature.geometry.coordinates?.[0]?.[0] ? [feature.geometry.coordinates[0][0][0], feature.geometry.coordinates[0][0][1]] : [0, 0];
+              if (!lon || !lat) return null;
+              const hubIdForCircle = feature.properties.hub_id;
+              return <Polygon key={`circle-${hubIdForCircle}`} positions={feature.geometry.coordinates[0].map(([circleLon, circleLat]) => [circleLat, circleLon])} pathOptions={{ color: COLORS.teal, weight: 1, fillOpacity: 0.025 }} />;
+            })}
+            {occurredTrucks.slice(0, 62).map((truck) => {
+              const from = hubLookup[truck.hub_id];
+              const rdc = rdcs.find((item) => item.rdc_id === truck.rdc_id);
+              if (!from || !rdc) return null;
+              return <Polyline key={truck.wave_id} positions={[[rdc.lat, rdc.lon], [from.lat, from.lon]]} pathOptions={{ color: COLORS.blue, weight: 1.5, dashArray: "7 5", opacity: 0.75 }} />;
+            })}
+            {occurredTransfers.map((transfer) => {
+              const from = hubLookup[transfer.donor_hub];
+              const to = hubLookup[transfer.receiver_hub];
+              if (!from || !to) return null;
+              return <Polyline key={transfer.transfer_id} positions={[[from.lat, from.lon], [to.lat, to.lon]]} pathOptions={{ color: COLORS.purple, weight: 2, dashArray: "4 7", opacity: 0.85 }} />;
+            })}
+            {reroutes.map((order) => {
+              const from = hubLookup[order.hub];
+              const receiver = hubLookup[order.home_hub];
+              if (!from || !receiver) return null;
+              return <Polyline key={order.order_id} positions={[[from.lat, from.lon], [receiver.lat, receiver.lon]]} pathOptions={{ color: COLORS.red, weight: 3, dashArray: "8 5" }} />;
+            })}
+            {activeGridlock && hubLookup["MH-05"] && (
+              <CircleMarker center={[hubLookup["MH-05"].lat, hubLookup["MH-05"].lon]} radius={15} pathOptions={{ color: COLORS.red, fillColor: COLORS.red, fillOpacity: 0.25, weight: 3 }} />
             )}
-          </div>
-          <div className="map-footer">
-            <span><i className="live-dot" />{hubs.length} MICRO-HUBS ACTIVE</span>
-            <span>{rdcs.length} REGIONAL DISTRIBUTION CENTERS</span>
-            <span>ROAD LINKS ARE APPROXIMATE</span>
-          </div>
-        </>
-      ) : (
-        <div className="map-empty">
-          <div className="empty-map-icon"><Icon name="map" size={22} /></div>
-          <strong>{generated?.network ? "Network map is unavailable" : "No network data loaded"}</strong>
-          <span>Run a scenario to cluster the Bangalore order data and build the hub network.</span>
+          </MapContainer>
         </div>
-      )}
-    </section>
-  );
-}
-
-function EventFeed({ alerts, busy }) {
-  const typeLabel = (type) => ({
-    GRIDLOCK: "TRAFFIC",
-    REPLENISHMENT: "REPLENISH",
-    P2P_REBALANCE: "P2P TRANSFER",
-    STOCKOUT: "STOCK-OUT",
-  }[type] || String(type || "NETWORK").replaceAll("_", " "));
-
-  return (
-    <section className="panel event-panel">
-      <SectionHeading
-        eyebrow="NETWORK SIGNALS"
-        title="Live event feed"
-        action={<span className="event-count">{alerts.length.toString().padStart(2, "0")} EVENTS</span>}
-      />
-      <div className="event-list">
-        {alerts.length ? alerts.slice(0, 7).map((alert, index) => (
-          <article className="event-item" key={`${alert.time}-${alert.type}-${index}`}>
-            <span className={`event-icon ${String(alert.type).toLowerCase()}`}>
-              <Icon name={alert.type === "GRIDLOCK" ? "alert" : alert.type === "P2P_REBALANCE" ? "refresh" : "box"} size={14} />
-            </span>
-            <div className="event-body">
-              <div className="event-meta"><span>{typeLabel(alert.type)}</span><time>{alert.time || "--:--"}</time></div>
-              <p>{alert.message || alert.hub || "Network event"}</p>
-            </div>
-          </article>
-        )) : (
-          <div className="feed-empty">
-            <span className="feed-line" />
-            <span className="feed-indicator"><i /></span>
-            <div><strong>{busy ? "Preparing simulation" : "Standing by"}</strong><p>{busy ? "Pipeline output will appear here as it is generated." : "Run a scenario to populate the operational event feed."}</p></div>
+        {activeGridlock && <div className="gridlock-banner"><b>GRIDLOCK</b> MH-05 · rerouting to MH-03 and MH-17</div>}
+        {hubId && hubLookup[hubId] && (
+          <div className="hub-card">
+            <div><b>{hubLookup[hubId].hub_id}</b><span>{hubLookup[hubId].nearest_area}</span></div>
+            <span>{hubLookup[hubId].orders_served} orders served</span>
+            <span>{formatNumber(hubLookup[hubId].dist_to_rdc_km)} km to RDC</span>
+            <button aria-label="Clear selected hub" onClick={() => setHubId(null)}>×</button>
           </div>
         )}
       </div>
-      {alerts.length > 7 && <div className="feed-more">+ {alerts.length - 7} earlier events in playback</div>}
-    </section>
-  );
-}
-
-function CompareBar({ label, baseline, healing, suffix = "%", lowerIsBetter = false }) {
-  const max = Math.max(Number(baseline) || 0, Number(healing) || 0, 1);
-  const baseWidth = Math.max(3, ((Number(baseline) || 0) / max) * 100);
-  const healWidth = Math.max(3, ((Number(healing) || 0) / max) * 100);
-  const improvement = Number.isFinite(Number(baseline)) && Number.isFinite(Number(healing))
-    ? Number(healing) - Number(baseline)
-    : null;
-  const better = improvement === null ? null : lowerIsBetter ? improvement < 0 : improvement > 0;
-  return (
-    <div className="compare-row">
-      <div className="compare-label">
-        <span>{label}</span>
-        {improvement !== null && <em className={better ? "improved" : "muted"}>{improvement > 0 ? "+" : ""}{fmt(improvement, 1)}{suffix}</em>}
-      </div>
-      <div className="compare-bars">
-        <div className="bar-track"><i className="bar-baseline" style={{ width: `${baseWidth}%` }} /><span>{fmt(baseline, 1)}{suffix}</span></div>
-        <div className="bar-track"><i className="bar-healing" style={{ width: `${healWidth}%` }} /><span>{fmt(healing, 1)}{suffix}</span></div>
-      </div>
-    </div>
-  );
-}
-
-function ServicePanel({ dashboard }) {
-  const baseline = dashboard.metrics?.baseline || {};
-  const healing = dashboard.metrics?.self_healing || {};
-  const hasMetrics = dashboard.generated?.simulation;
-  return (
-    <section className="panel service-panel">
-      <SectionHeading
-        eyebrow="PAIRED SIMULATION · SAME ORDERS"
-        title="Baseline vs self-healing"
-        action={<span className="paired-badge"><Icon name="check" size={12} /> FAIR COMPARISON</span>}
-      />
-      {!hasMetrics ? (
-        <div className="chart-empty">Run a scenario to compare the baseline and self-healing modes on the same simulated orders.</div>
-      ) : (
-        <>
-          <div className="chart-legend"><span><i className="bar-legend baseline" />Baseline</span><span><i className="bar-legend healing" />Self-healing</span></div>
-          <div className="comparison">
-            <CompareBar label="Promised SLA met" baseline={baseline.sla_met_pct} healing={healing.sla_met_pct} />
-            <CompareBar label="Standard 15-min SLA" baseline={baseline.met_standard_sla_pct} healing={healing.met_standard_sla_pct} />
-            <CompareBar label="Avg delivery time" baseline={baseline.avg_delivery_min} healing={healing.avg_delivery_min} suffix=" min" lowerIsBetter />
-            <CompareBar label="Cancelled orders" baseline={baseline.orders_cancelled_pct} healing={healing.orders_cancelled_pct} suffix="%" lowerIsBetter />
-            <CompareBar label="Contribution / order" baseline={baseline.contribution_per_order} healing={healing.contribution_per_order} suffix=" Rs" />
-          </div>
-          <p className="chart-footnote">Green orders have a longer promised SLA. The standard-SLA row holds both modes to the same 15-minute promise.</p>
-        </>
-      )}
-    </section>
-  );
-}
-
-function HubPanel({ hubs, selectedHub, onSelectHub, generated }) {
-  const visible = selectedHub ? hubs.filter((hub) => hub.hub_id === selectedHub) : hubs;
-  const list = visible.length ? visible.slice(0, 5) : hubs.slice(0, 5);
-  return (
-    <section className="panel hub-panel">
-      <SectionHeading
-        eyebrow="FULFILLMENT NODES"
-        title="Micro-hub network"
-        action={<span className="node-total">{hubs.length.toString().padStart(2, "0")} NODES</span>}
-      />
-      {!generated?.network ? (
-        <div className="compact-empty">Hub capacity and coverage populate after clustering runs.</div>
-      ) : list.length ? (
-        <div className="hub-list">
-          {list.map((hub) => {
-            const served = Number(hub.orders_served) || 0;
-            const total = Number(hub.dense_orders) || served || 1;
-            const pct = Math.min(100, Math.round((served / total) * 100));
-            return (
-              <button
-                className={`hub-row ${selectedHub === hub.hub_id ? "selected" : ""}`}
-                key={hub.hub_id}
-                onClick={() => onSelectHub(selectedHub === hub.hub_id ? null : hub.hub_id)}
-              >
-                <span className="hub-row-mark"><i /></span>
-                <span className="hub-row-copy"><strong>{hub.hub_id}</strong><small>{hub.nearest_area || hub.rdc_id || "Bengaluru"}</small></span>
-                <span className="hub-row-capacity"><span>{fmt(served)} <small>served</small></span><i><b style={{ width: `${pct}%` }} /></i></span>
-                <Icon name="arrow" size={13} />
-              </button>
-            );
-          })}
-          {hubs.length > list.length && <div className="hub-list-foot">Showing {list.length} of {hubs.length} generated micro-hubs</div>}
-        </div>
-      ) : <div className="compact-empty">No micro-hubs in the generated network.</div>}
-    </section>
-  );
-}
-
-function TierPanel({ tiers, generated }) {
-  const colors = { express: "coral", instant: "blue", green: "mint" };
-  return (
-    <section className="panel tier-panel">
-      <SectionHeading eyebrow="CHECKOUT EXPERIENCE" title="Delivery tier mix" />
-      {!generated?.simulation || !tiers.length ? (
-        <div className="compact-empty">Express, Instant, and Green order mix appears after a simulation run.</div>
-      ) : (
-        <div className="tier-list">
-          {tiers.map((tier) => (
-            <article className="tier-row" key={tier.tier}>
-              <span className={`tier-tag ${colors[tier.tier] || "blue"}`}>{tier.tier}</span>
-              <span className="tier-orders">{fmt(tier.orders)} <small>orders</small></span>
-              <span className="tier-sla"><strong>{fmt(tier.sla_met_pct_healing, 1)}%</strong><small>on time</small></span>
-              <span className="tier-time">{fmt(tier.avg_min_healing, 1)}<small> min avg</small></span>
-            </article>
+      <aside className="panel side-panel">
+        <SectionHeading eyebrow={`NETWORK SIGNALS · ${formatTime(clock)}`} title="Control loop" />
+        <div className="loop">
+          {["detect", "decide", "act", "measure"].map((step, index) => (
+            <button
+              className={activeStage === step ? "active" : ""}
+              key={step}
+              onClick={() => setActiveStage(step)}
+              aria-pressed={activeStage === step}
+            >
+              <span>{index + 1}</span><b>{step}</b>
+            </button>
           ))}
         </div>
-      )}
-    </section>
-  );
-}
-
-function BasketPanel({ dashboard }) {
-  const basket = dashboard.basket || {};
-  const metrics = dashboard.metrics?.self_healing || {};
-  return (
-    <section className="panel basket-panel">
-      <SectionHeading eyebrow="BASKET AFFINITY" title="Recipe & co-location" />
-      {basket.available ? (
-        <>
-          <div className="basket-stat-grid">
-            <div><strong>{fmt(metrics.addon_offers)}</strong><small>recipe add-on offers</small></div>
-            <div><strong>{fmt(metrics.coloc_badge_orders)}</strong><small>co-location orders</small></div>
-            <div><strong>{fmt(basket.recipe_rules)}</strong><small>recipe rules mined</small></div>
-            <div><strong>{fmt(basket.colocation_pairs_flagged)}</strong><small>category pairs flagged</small></div>
-          </div>
-          <p className="panel-note">Affinity rules are learned from the included Instacart basket sample; product names are from the project catalog.</p>
-        </>
-      ) : (
-        <div className="basket-unavailable">
-          <span className="basket-icon"><Icon name="box" size={17} /></span>
-          <div><strong>Basket rules not generated</strong><p>Optional: enable basket mining when running a scenario. It scans the large Instacart order file.</p></div>
+        <div className="stage-details" aria-live="polite">
+          <strong>{activeStage} · {activeStage === "measure" ? "scenario results" : "events by selected time"}</strong>
+          {stageContent[activeStage].length ? (
+            <ul>{stageContent[activeStage].map((item, index) => <li key={`${activeStage}-${index}`}>{item}</li>)}</ul>
+          ) : <p>{stageEmpty[activeStage]}</p>}
         </div>
-      )}
-    </section>
-  );
-}
-
-function OrderTable({ orders, generated }) {
-  return (
-    <section className="panel order-panel">
-      <SectionHeading
-        eyebrow="LATEST SIMULATED ORDERS"
-        title="Order ledger"
-        action={generated?.simulation && <span className="ledger-count">{orders.length} RECORDS</span>}
-      />
-      {!generated?.simulation ? (
-        <div className="compact-empty">The paired order ledger is created when a simulation completes.</div>
-      ) : orders.length ? (
-        <div className="table-scroll">
-          <table>
-            <thead><tr><th>ORDER</th><th>TIER</th><th>FULFILLED AT</th><th>DELIVERY</th><th>ITEMS HEALED</th><th>STATUS</th></tr></thead>
-            <tbody>{orders.slice(0, 8).map((order) => (
-              <tr key={`${order.mode}-${order.order_id}`}>
-                <td className="order-id">{order.order_id}</td>
-                <td><span className={`mini-tier ${order.tier}`}>{order.tier}</span></td>
-                <td>{order.hub || order.home_hub || "--"}</td>
-                <td>{fmt(order.total_min, 1)} <small>min</small></td>
-                <td>{fmt((Number(order.n_substituted) || 0) + (Number(order.n_sourced) || 0))}</td>
-                <td><span className={`sla-state ${String(order.sla_met).toLowerCase() === "true" ? "met" : "late"}`}><i />{String(order.sla_met).toLowerCase() === "true" ? "On time" : "Late"}</span></td>
-              </tr>
-            ))}</tbody>
-          </table>
-        </div>
-      ) : <div className="compact-empty">No order rows were returned by the simulation.</div>}
-    </section>
-  );
-}
-
-function PlaybackPanel({ alerts, generated }) {
-  const selected = alerts.slice(0, 5);
-  return (
-    <section className="panel playback-panel">
-      <SectionHeading
-        eyebrow="INCIDENT REVIEW"
-        title="Playback & alert feed"
-        action={<span className="playback-time"><Icon name="clock" size={13} /> SIMULATED WINDOW</span>}
-      />
-      {!generated?.simulation ? (
-        <div className="compact-empty">Run the simulation to build a time-ordered incident playback.</div>
-      ) : selected.length ? (
-        <div className="playback-track">
-          <div className="track-line" />
-          {selected.map((alert, index) => (
-            <div className="track-event" key={`${alert.time}-${alert.type}-${index}`}>
-              <span className={`track-dot ${String(alert.type).toLowerCase()}`} />
-              <time>{alert.time || "--:--"}</time>
-              <div><strong>{String(alert.type || "event").replaceAll("_", " ")}</strong><small>{alert.hub || alert.message || "Network event"}</small></div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="feed-empty small"><span className="feed-line" /><span className="feed-indicator"><i /></span><div><strong>No alerts in this window</strong><p>The run completed without an alert event.</p></div></div>
-      )}
-    </section>
-  );
-}
-
-function ExperimentPanel({ experiments, generated }) {
-  return (
-    <section className="panel experiment-panel">
-      <SectionHeading
-        eyebrow="SCENARIO LADDER"
-        title="Demand stress response"
-        action={generated?.experiments && <span className="paired-badge"><Icon name="check" size={12} /> MONTE CARLO</span>}
-      />
-      {generated?.experiments && experiments.length ? (
-        <div className="experiment-list">
-          {experiments.slice(0, 7).map((row, index) => (
-            <div className="experiment-row" key={row.scenario}>
-              <span className="experiment-index">{String(index + 1).padStart(2, "0")}</span>
-              <span className="experiment-name">{row.scenario.replace(/^\d+\s*/, "")}</span>
-              <span className="experiment-value">{fmt(row.baseline_mean, 1)}<i> → </i><strong>{fmt(row.healing_mean, 1)}{row.metric === "sla_met_pct" ? "%" : ""}</strong></span>
-            </div>
-          ))}
-          <p className="chart-footnote">Paired runs · mean of seeds · baseline → self-healing. Metric: promised SLA met.</p>
-        </div>
-      ) : (
-        <div className="experiment-empty">
-          <div className="experiment-summary"><span><Icon name="chart" size={18} /></span><div><strong>Seven scenarios, paired runs</strong><small>Normal peak through 2.5× surge, gridlock, and slow traffic.</small></div></div>
-          <p>Enable the optional experiment ladder in Run scenario to calculate confidence intervals from the project's Monte Carlo runner.</p>
-        </div>
-      )}
-    </section>
-  );
-}
-
-function RunDrawer({ open, onClose, onRun, busy, apiOnline, status }) {
-  const [surge, setSurge] = useState(1.5);
-  const [greenShare, setGreenShare] = useState(0.4);
-  const [seed, setSeed] = useState(42);
-  const [includeBaskets, setIncludeBaskets] = useState(false);
-  const [runExperiments, setRunExperiments] = useState(false);
-
-  if (!open) return null;
-  return (
-    <div className="drawer-backdrop" onMouseDown={(event) => event.target === event.currentTarget && !busy && onClose()}>
-      <aside className="run-drawer" aria-label="Run simulation controls">
-        <div className="drawer-head">
-          <div><span className="eyebrow">SIMULATION CONTROL</span><h2>Run a scenario</h2></div>
-          <button className="icon-button" aria-label="Close settings" onClick={onClose} disabled={busy}><Icon name="close" size={18} /></button>
-        </div>
-        <p className="drawer-intro">The engine replays the same orders against baseline and self-healing operations. A first run also prepares the local network and product catalog.</p>
-        <label className="field-label" htmlFor="surge-control">Demand surge <strong>{Number(surge).toFixed(1)}×</strong></label>
-        <input id="surge-control" className="range-input" type="range" min="1" max="3" step="0.5" value={surge} onChange={(event) => setSurge(Number(event.target.value))} />
-        <div className="range-labels"><span>Normal · 1×</span><span>Rush · 3×</span></div>
-        <label className="field-label" htmlFor="green-control">Green delivery adoption <strong>{Math.round(greenShare * 100)}%</strong></label>
-        <input id="green-control" className="range-input green-range" type="range" min="0" max="1" step="0.1" value={greenShare} onChange={(event) => setGreenShare(Number(event.target.value))} />
-        <div className="range-labels"><span>Instant first</span><span>Consolidated first</span></div>
-        <label className="field-label" htmlFor="seed-control">Random seed</label>
-        <input id="seed-control" className="text-input" type="number" min="0" value={seed} onChange={(event) => setSeed(event.target.value)} />
-        <label className="option-row">
-          <input type="checkbox" checked={includeBaskets} onChange={(event) => setIncludeBaskets(event.target.checked)} />
-          <span><strong>Build recipe & co-location rules</strong><small>Optional. Scans the large Instacart order file; may take several minutes.</small></span>
-        </label>
-        <label className="option-row">
-          <input type="checkbox" checked={runExperiments} onChange={(event) => setRunExperiments(event.target.checked)} />
-          <span><strong>Run the 7-scenario experiment ladder</strong><small>Optional. Runs 3 seeds per scenario and saves the Monte Carlo summary.</small></span>
-        </label>
-        {busy && (
-          <div className="run-progress">
-            <span className="spinner" />
-            <div><strong>{status?.stage || "Starting pipeline"}</strong><small>{status?.message || "Working with the local project data."}</small></div>
-            <div className="progress-track"><i /></div>
-          </div>
-        )}
-        {status?.error && !busy && <div className="drawer-error"><Icon name="alert" size={15} />{status.error}</div>}
-        <div className="drawer-bottom">
-          <span>{apiOnline ? "Local Python simulation engine" : "Start the backend to run scenarios"}</span>
-          <button
-            className="button button-primary full-button"
-            disabled={!apiOnline || busy}
-            onClick={() => onRun({ surge, green_share: greenShare, seed: Number(seed), include_baskets: includeBaskets, run_experiments: runExperiments })}
-          >
-            <Icon name={busy ? "refresh" : "play"} size={15} />
-            {busy ? "Simulation running..." : "Prepare & run simulation"}
-          </button>
+        <div className="legend">
+          <span><i style={{ background: COLORS.teal }} />Micro-hub</span>
+          <span><i style={{ background: COLORS.purple }} />RDC / P2P</span>
+          <span><i style={{ background: COLORS.blue }} />Truck</span>
+          <span><i style={{ background: COLORS.red }} />Reroute / gridlock</span>
         </div>
       </aside>
-    </div>
+    </section>
   );
 }
 
-function DataNotes({ dashboard }) {
-  const generated = dashboard.generated || {};
-  const tags = [
-    ["NETWORK", generated.network, "Clustered order coordinates"],
-    ["SKU CATALOG", generated.catalog, "BigBasket product catalog"],
-    ["SIMULATION", generated.simulation, "Paired SLA results"],
-    ["BASKET RULES", generated.baskets, "Optional Instacart mining"],
-  ];
+function Consolidation({ data }) {
+  const [mode, setMode] = useState("self_healing");
+  const summary = data.summary || {};
+  const metric = (name) => summary[name]?.[mode] ?? summary[name]?.[mode === "self_healing" ? "self_healing" : "baseline"];
+  const tiers = data.tiers || [];
+  const tierPerformance = tiers.map((tier) => {
+    const orders = (data.orders || []).filter((order) => order.mode === mode && order.tier === tier.tier);
+    const onTime = orders.filter((order) => order.sla_met === true || String(order.sla_met).toLowerCase() === "true").length;
+    const average = orders.length
+      ? orders.reduce((total, order) => total + Number(order.total_min || 0), 0) / orders.length
+      : mode === "baseline" ? tier.avg_min_baseline : tier.avg_min_healing;
+    const slaMetPct = orders.length
+      ? (onTime / orders.length) * 100
+      : tier.sla_met_pct_healing;
+    return {
+      ...tier,
+      orderCount: orders.length || tier.orders,
+      average,
+      slaMetPct,
+    };
+  });
+  const sweep = data.sweep || [];
+  const pairs = (data.colocation || []).filter((row) => row.colocate === true).slice(0, 9);
+
   return (
-    <footer className="data-notes">
-      <div><span className="footer-mark">SCM</span><span>Self-healing quick-commerce network <i>·</i> Bangalore</span></div>
-      <div className="source-chips">{tags.map(([label, ready, hint]) => <span className={`source-chip ${ready ? "ready" : ""}`} title={hint} key={label}><i />{label}</span>)}</div>
-      <p>Simulated orders, assumed fees and speeds. Analytics are decision-support estimates, not live operations data.</p>
-    </footer>
+    <section>
+      <div className="page-toolbar">
+        <SectionHeading eyebrow="BASE SCENARIO" title="Before and after consolidation" />
+        <div className="segmented">
+          <button className={mode === "baseline" ? "active" : ""} onClick={() => setMode("baseline")}>Baseline</button>
+          <button className={mode === "self_healing" ? "active" : ""} onClick={() => setMode("self_healing")}>Self-healing</button>
+        </div>
+      </div>
+      <div className="kpi-grid">
+        {[
+          ["Promised SLA met", metric("sla_met_pct"), "%"],
+          ["Avg delivery", metric("avg_delivery_min"), " min"],
+          ["P90 delivery", metric("p90_delivery_min"), " min"],
+          ["Rider trips", metric("rider_trips"), ""],
+          ["Cancelled", metric("orders_cancelled_pct"), "%"],
+          ["Contribution / order", metric("contribution_per_order"), " Rs"],
+        ].map(([label, value, suffix]) => (
+          <article className="kpi" key={label}><span>{label}</span><strong>{formatNumber(value)}{suffix}</strong></article>
+        ))}
+      </div>
+      <div className="content-grid">
+        <article className="panel">
+          <SectionHeading eyebrow={`DELIVERY TIERS · ${mode === "baseline" ? "BASELINE" : "SELF-HEALING"}`} title="Tier performance" />
+          <div className="tier-table">
+            {tierPerformance.map((tier) => (
+              <div className="tier-row" key={tier.tier}>
+                <span className={`tier ${tier.tier}`}>{tier.tier}</span>
+                <span><b>{formatNumber(tier.orderCount, 0)}</b><small>orders</small></span>
+                <span><b>{formatNumber(tier.average)}</b><small>avg minutes</small></span>
+                <span><b>{formatNumber(tier.slaMetPct)}%</b><small>SLA met</small></span>
+              </div>
+            ))}
+          </div>
+          <p className="note">Green average batch size: {tiers.find((tier) => tier.tier === "green")?.avg_batch_size ?? "--"}.</p>
+        </article>
+        <article className="panel">
+          <SectionHeading eyebrow="SELF-HEALING ACTIONS" title="Add-ons & co-location" />
+          <div className="action-stats">
+            <div><span>Recipe add-ons</span><b>{formatNumber(metric("addon_accepted"), 0)} accepted</b><small>{formatNumber(metric("addon_offers"), 0)} offered · Rs {formatNumber(metric("addon_revenue_rs"), 0)}</small></div>
+            <div><span>Co-location badge</span><b>{formatNumber(metric("coloc_badge_orders"), 0)} orders</b><small>{formatNumber(metric("coloc_badge_filled_at_one_hub_pct"))}% filled at one hub</small></div>
+          </div>
+          <div className="pair-list">{pairs.map((pair) => <span key={`${pair.category_a}-${pair.category_b}`}>{pair.category_a} + {pair.category_b}</span>)}</div>
+        </article>
+        <article className="panel incentive-card">
+          <SectionHeading eyebrow="GREEN ADOPTION" title="Incentive cost sweep" />
+          {sweep.length ? (
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={sweep} margin={{ top: 12, right: 8, left: -18, bottom: 0 }}>
+                <CartesianGrid stroke="#202C38" vertical={false} />
+                <XAxis dataKey="green_share" tickFormatter={(value) => `${value}%`} stroke="#718096" />
+                <YAxis stroke="#718096" />
+                <ChartTooltip cursor={{ fill: "rgba(20,184,166,.06)" }} />
+                <Bar dataKey="net_cost_cashback" name="Cashback" fill="#3B82F6" />
+                <Bar dataKey="net_cost_conditional" name="Conditional" fill="#14B8A6" />
+                <Bar dataKey="net_cost_nudge" name="Nudge" fill="#F59E0B" />
+                <Bar dataKey="net_cost_hybrid" name="Hybrid" fill="#8B5CF6" />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : <div className="empty-small">Green adoption sweep unavailable.</div>}
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function Inventory({ data }) {
+  const [hubId, setHubId] = useState("MH-05");
+  const hub = (data.hubs || []).find((item) => item.hub_id === hubId);
+  const stockAlerts = (data.alerts || []).filter((alert) =>
+    alert.hub === hubId &&
+    ["STOCKOUT_SUBSTITUTE", "STOCKOUT_SOURCING", "ITEM_DROPPED_BY_PREFERENCE"].includes(alert.type)
+  ).sort((a, b) => timeToMinutes(b.time) - timeToMinutes(a.time));
+  const responseCounts = [
+    { action: "Substituted", events: stockAlerts.filter((alert) => alert.type === "STOCKOUT_SUBSTITUTE").length },
+    { action: "Neighbor sourced", events: stockAlerts.filter((alert) => alert.type === "STOCKOUT_SOURCING").length },
+    { action: "Dropped", events: stockAlerts.filter((alert) => alert.type === "ITEM_DROPPED_BY_PREFERENCE").length },
+  ];
+  const trucks = (data.trucks || []).filter((truck) => truck.hub_id === hubId);
+  const transfers = (data.transfers || []).filter((transfer) => transfer.donor_hub === hubId || transfer.receiver_hub === hubId);
+  const hasResponses = responseCounts.some((row) => row.events > 0);
+
+  return (
+    <section className="content-grid inventory-layout">
+      <article className="panel hub-picker">
+        <SectionHeading eyebrow="RDC MICRO VIEW" title="Inventory node" />
+        <label>Micro-hub
+          <select value={hubId} onChange={(event) => setHubId(event.target.value)}>
+            {(data.hubs || []).map((item) => <option value={item.hub_id} key={item.hub_id}>{item.hub_id} · {item.nearest_area}</option>)}
+          </select>
+        </label>
+        {hub && <div className="hub-details">
+          <span><b>{hub.orders_served}</b><small>orders served</small></span>
+          <span><b>{formatNumber(hub.coverage_radius_p90_km)} km</b><small>P90 coverage</small></span>
+          <span><b>{formatNumber(hub.dist_to_rdc_km)} km</b><small>to RDC</small></span>
+        </div>}
+      </article>
+      <article className="panel">
+        <SectionHeading eyebrow="STOCK-OUT RESPONSES" title={`Actions at ${hubId}`} />
+        {hasResponses ? (
+          <ResponsiveContainer width="100%" height={170}>
+            <BarChart data={responseCounts} layout="vertical" margin={{ top: 8, right: 12, left: 2, bottom: 0 }}>
+              <CartesianGrid stroke="#202C38" horizontal={false} />
+              <XAxis type="number" allowDecimals={false} stroke="#718096" />
+              <YAxis type="category" dataKey="action" width={104} stroke="#9AA8B6" tick={{ fontSize: 9 }} />
+              <ChartTooltip cursor={{ fill: "rgba(20,184,166,.06)" }} />
+              <Bar dataKey="events" name="Events" fill={COLORS.teal} radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : <div className="empty-small">No stock-out responses recorded for this hub.</div>}
+      </article>
+      <article className="panel">
+        <SectionHeading eyebrow="STOCK-OUT FEED" title="Newest first" />
+        <div className="alert-list">{stockAlerts.length ? stockAlerts.slice(0, 8).map((alert, index) => (
+          <div key={index}><time>{alert.time}</time><p>{alert.message}</p></div>
+        )) : <p className="empty-small">No stock-out events at this hub in the current feed.</p>}</div>
+      </article>
+      <article className="panel">
+        <SectionHeading eyebrow="REBALANCE STATUS" title="Truck / P2P" />
+        {trucks.slice(0, 4).map((truck) => <div className="status-row" key={truck.wave_id}><b>Truck · {truck.wave_id}</b><span>{truck.departs} → {truck.arrives}</span><small>{truck.units} units · {truck.road_km} km</small></div>)}
+        {transfers.slice(0, 4).map((transfer) => <div className="status-row purple" key={transfer.transfer_id}><b>P2P · {transfer.transfer_id}</b><span>{transfer.donor_hub} → {transfer.receiver_hub}</span><small>{transfer.units} units · arrives {transfer.arrives}</small></div>)}
+        {!trucks.length && !transfers.length && <p className="empty-small">No active truck or P2P record for this hub.</p>}
+      </article>
+    </section>
+  );
+}
+
+function StressTests({ data }) {
+  const [metric, setMetric] = useState("sla_met_pct");
+  const [strict, setStrict] = useState(false);
+  const rows = (data.experiments || []).filter((row) => row.metric === (strict ? "met_standard_sla_pct" : metric));
+  const chartRows = rows.map((row) => ({
+    name: row.scenario,
+    baseline: row.baseline_mean,
+    healing: row.healing_mean,
+  }));
+
+  return (
+    <section>
+      <div className="page-toolbar">
+        <SectionHeading
+          eyebrow="MONTE CARLO"
+          title="Stress-test results"
+          aside={<span className="seed-label">{rows.length ? `Mean of ${rows[0].reps} seeds` : "No experiment data"}</span>}
+        />
+        <div className="stress-controls">
+          <select value={metric} onChange={(event) => setMetric(event.target.value)}>
+            <option value="sla_met_pct">Promised SLA</option>
+            <option value="avg_delivery_min">Delivery time</option>
+            <option value="orders_cancelled_pct">Cancelled %</option>
+            <option value="contribution_per_order">Contribution</option>
+          </select>
+          <label className="toggle"><input type="checkbox" checked={strict} onChange={(event) => setStrict(event.target.checked)} />Strict 15-minute SLA</label>
+        </div>
+      </div>
+      <article className="panel stress-chart">
+        {chartRows.length ? (
+          <ResponsiveContainer width="100%" height={390}>
+            <BarChart data={chartRows} margin={{ top: 20, right: 20, left: 0, bottom: 50 }}>
+              <CartesianGrid stroke="#202C38" vertical={false} />
+              <XAxis dataKey="name" stroke="#718096" angle={-18} textAnchor="end" interval={0} />
+              <YAxis stroke="#718096" />
+              <ChartTooltip />
+              <Bar dataKey="baseline" name="Baseline" fill={COLORS.blue} radius={[4, 4, 0, 0]} />
+              <Bar dataKey="healing" name="Self-healing" fill={COLORS.teal} radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : <div className="empty-small">Experiment summary file is not available in the current static package.</div>}
+      </article>
+    </section>
+  );
+}
+
+function Playback({ data, clock, setClock, playing, setPlaying, speed, setSpeed }) {
+  const mode = "self_healing";
+  const orders = (data.orders || []).filter((order) => order.mode === mode);
+  const activeOrders = orders.filter((order) => Number(order.t) <= clock && Number(order.delivered) >= clock).slice(0, 14);
+  const firedAlerts = (data.alerts || []).filter((alert) => timeToMinutes(alert.time) <= clock).sort((a, b) => timeToMinutes(b.time) - timeToMinutes(a.time));
+  const latestToasts = firedAlerts.slice(0, 3);
+  const rerouteCount = firedAlerts.filter((alert) => alert.type === "GRIDLOCK").length ? 2 : 0;
+  const p2pCount = firedAlerts.filter((alert) => alert.type === "P2P_REBALANCE").length;
+  const truckCount = firedAlerts.filter((alert) => alert.type === "REPLENISHMENT").length;
+  const addonCount = firedAlerts.filter((alert) => alert.type === "ADDON_ACCEPTED").length;
+  const hubLookup = Object.fromEntries((data.hubs || []).map((hub) => [hub.hub_id, hub]));
+
+  useEffect(() => {
+    if (!playing) return undefined;
+    const interval = window.setInterval(() => {
+      setClock((value) => value >= 1273 ? 1080 : value + 1 / speed);
+    }, 1000 / speed);
+    return () => window.clearInterval(interval);
+  }, [playing, speed, setClock]);
+
+  function timerColor(order) {
+    const elapsed = Math.max(0, clock - Number(order.t));
+    const limit = Number(order.sla_limit) || 15;
+    if (elapsed > limit) return "red";
+    if (elapsed >= limit * 0.8) return "amber";
+    return "green";
+  }
+
+  return (
+    <section>
+      <div className="playback-toolbar panel">
+        <button className="play-button" onClick={() => setPlaying((value) => !value)}>{playing ? "Ⅱ" : "▶"}</button>
+        <strong>{formatTime(clock)}</strong>
+        <input aria-label="Playback time" type="range" min="1080" max="1273" step="0.25" value={clock} onChange={(event) => setClock(Number(event.target.value))} />
+      </div>
+      {clock >= 1155 && clock <= 1185 && <div className="gridlock-banner playback-gridlock"><b>GRIDLOCK</b> MH-05 · 19:15–19:45 · reroutes to MH-03 and MH-17</div>}
+      <div className="counter-row">
+        <span><b>{rerouteCount}</b> reroutes</span>
+        <span><b>{p2pCount}</b> P2P</span>
+        <span><b>{truckCount}</b> trucks</span>
+        <span><b>{addonCount}</b> add-ons</span>
+      </div>
+      <div className="playback-layout">
+        <article className="panel order-list">
+          <SectionHeading eyebrow="LIVE ORDER LEDGER" title="Active orders" aside={<span className="ledger-count">{activeOrders.length} ACTIVE</span>} />
+          <div className="order-table">
+            {activeOrders.map((order) => {
+              const elapsed = Math.max(0, clock - Number(order.t));
+              const color = timerColor(order);
+              return (
+                <button className="order-row" key={order.order_id} onClick={() => alert(data.timeline || "Order journey data unavailable.")}>
+                  <span className={`tier ${order.tier}`}>{order.tier}</span>
+                  <span><b>{order.order_id}</b><small>{order.hub} · batch {order.batch_size}</small></span>
+                  <span className={`timer ${color}`}>{elapsed >= (order.sla_limit || 15) ? "+" : ""}{Math.floor(elapsed)}:{String(Math.floor((elapsed % 1) * 60)).padStart(2, "0")}</span>
+                  {Number(order.incentive_rs) > 0 && <span className="incentive">Rs {order.incentive_rs} credited</span>}
+                </button>
+              );
+            })}
+            {!activeOrders.length && <p className="empty-small">No active orders at this clock position.</p>}
+          </div>
+        </article>
+        <aside className="panel toast-feed">
+          <SectionHeading eyebrow="EVENT FEED" title="Alert stream" aside={<span>{firedAlerts.length} fired</span>} />
+          <div className="toasts">
+            {latestToasts.map((alert, index) => <div className={`toast ${alert.type.toLowerCase()}`} key={`${alert.time}-${alert.type}-${index}`}><b>{alert.type.replaceAll("_", " ")}</b><p>{alert.message}</p><time>{alert.time}</time></div>)}
+          </div>
+        </aside>
+      </div>
+    </section>
   );
 }
 
 export default function App() {
-  const [activeNav, setActiveNav] = useState("Overview");
-  const [dashboard, setDashboard] = useState(EMPTY_DASHBOARD);
-  const [status, setStatus] = useState({ running: false });
-  const [apiOnline, setApiOnline] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedHub, setSelectedHub] = useState(null);
+  const [page, setPage] = useState("map");
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [clock, setClock] = useState(1080);
+  const [playing, setPlaying] = useState(false);
+  const [speed, setSpeed] = useState(1);
 
-  const loadData = useCallback(async () => {
-    try {
-      const [health, data, runStatus] = await Promise.all([
-        request("/api/health"),
-        request("/api/dashboard"),
-        request("/api/status"),
-      ]);
-      setApiOnline(Boolean(health.ok));
-      setDashboard(data);
-      setStatus(runStatus);
-      setError("");
-    } catch (loadError) {
-      setApiOnline(false);
+  useEffect(() => {
+    Promise.all([
+      fetch(DATA + "hubs.geojson").then((response) => response.json()),
+      csv("hubs_micro.csv"),
+      csv("hubs_macro.csv"),
+      fetch(DATA + "cluster_summary.json").then((response) => response.json()),
+      csv("sla_sim_summary.csv"),
+      csv("sla_tier_summary.csv"),
+      csv("sla_alerts.csv"),
+      csv("sla_sim_orders.csv"),
+      csv("replenishment_alerts.csv"),
+      csv("p2p_transfers.csv"),
+      csv("green_adoption_sweep.csv").catch(() => []),
+      csv("colocation_pairs.csv"),
+      csv("experiments/experiment_summary.csv").catch(() => []),
+      fetch(DATA + "sla_timeline_example.txt").then((response) => response.ok ? response.text() : "").catch(() => ""),
+    ]).then(([
+      geojson, hubs, rdcs, cluster, summaryRows, tiers, alerts, orders, trucks, transfers, sweep, colocation, experiments, timeline,
+    ]) => {
+      const summary = Object.fromEntries(summaryRows.map((row) => [
+        row[""],
+        { baseline: row.baseline, healing_reactive_only: row.healing_reactive_only, self_healing: row.self_healing },
+      ]));
+      setData({
+        geojson, hubs, rdcs, cluster, summary, tiers, alerts, orders, trucks, transfers, sweep, colocation, experiments, timeline,
+      });
+      setLoading(false);
+    }).catch((loadError) => {
       setError(loadError.message);
-    }
+      setLoading(false);
+    });
   }, []);
 
   useEffect(() => {
-    loadData();
-    const timer = window.setInterval(loadData, status.running ? 1500 : 6000);
-    return () => window.clearInterval(timer);
-  }, [loadData, status.running]);
+    document.documentElement.style.background = COLORS.bg;
+  }, []);
 
-  const runScenario = async (config) => {
-    setError("");
-    try {
-      const result = await request("/api/run", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(config),
-      });
-      setStatus(result);
-    } catch (runError) {
-      setError(runError.message);
-    }
-  };
-
-  const scrollToSection = (section) => {
-    setActiveNav(section);
-    const target = document.getElementById(section.toLowerCase().replaceAll(" ", "-").replace("&", "and"));
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const metrics = dashboard.metrics?.self_healing || {};
-  const generated = dashboard.generated || {};
-  const onTime = metricValue(dashboard.metrics, "sla_met_pct");
-  const updateText = status.running ? status.message || "Pipeline is running" : generated.simulation ? "Latest simulation output" : "Run to generate metrics";
+  if (loading) return <div className="loading-screen"><div className="brand-mark">◆</div><p>Loading static command data</p></div>;
+  if (error) return <div className="loading-screen"><p className="error-text">{error}</p></div>;
 
   return (
     <div className="app-shell">
-      <Header
-        active={activeNav}
-        onNavigate={scrollToSection}
-        apiOnline={apiOnline}
-        busy={status.running}
-        onOpenRun={() => setDrawerOpen(true)}
-      />
-      <main className="dashboard">
-        <section className="page-intro">
-          <div>
-            <div className="breadcrumb"><span>OPERATIONS</span><b>/</b><span>NETWORK INTELLIGENCE</span></div>
-            <h1>SCM command center <span className="title-dot">.</span></h1>
-            <p>Self-healing quick-commerce network <i>·</i> Bengaluru</p>
-          </div>
-          <div className="intro-status">
-            <span className={`run-state ${status.running ? "running" : status.error ? "error" : generated.simulation ? "complete" : "idle"}`}><i />{statusLabel(status)}</span>
-            <span className="last-updated">{updateText}</span>
-          </div>
-        </section>
-
-        {error && <div className="error-banner" role="alert"><Icon name="alert" size={16} /><span><strong>Could not reach the simulation service.</strong> {error} Check that the Python API is running on port 8787.</span><button aria-label="Dismiss error" onClick={() => setError("")}><Icon name="close" size={15} /></button></div>}
-
-        {!generated.simulation && !status.running && (
-          <section className="setup-banner">
-            <div className="setup-icon"><Icon name="pulse" size={19} /></div>
-            <div className="setup-copy"><strong>{apiOnline ? "Your command center is ready to initialize" : "Connect the local simulation engine"}</strong><p>{apiOnline ? "No generated scenario is loaded yet. The first run prepares your SKU catalog and Bangalore hub network, then compares both operating modes." : "Start the Python API and Vite frontend to prepare and run simulations using the project data."}</p></div>
-            <button className="button button-quiet" onClick={() => setDrawerOpen(true)} disabled={!apiOnline}><Icon name="play" size={14} />Configure run</button>
-          </section>
-        )}
-
-        <section id="overview" className="stats-grid" aria-label="Key operating metrics">
-          <StatCard label="PROMISED SLA MET" value={fmt(onTime, 1)} suffix={onTime === undefined ? "" : "%"} sub={generated.simulation ? `${fmt(metrics.orders)} orders · self-healing` : "Waiting for a simulation"} icon="clock" tone="mint" />
-          <StatCard label="AVG DELIVERY" value={fmt(metricValue(dashboard.metrics, "avg_delivery_min"), 1)} suffix={generated.simulation ? " min" : ""} sub={generated.simulation ? `P90 ${fmt(metrics.p90_delivery_min, 1)} min` : "Observed from the simulated window"} icon="arrow" tone="blue" />
-          <StatCard label="EXACT ITEM FILL" value={fmt(metricValue(dashboard.metrics, "exact_item_fill_pct"), 1)} suffix={generated.simulation ? "%" : ""} sub={generated.simulation ? `${fmt(metrics.items_substituted)} substitutions · ${fmt(metrics.items_sourced_from_neighbour)} neighbour sourced` : "On-order item availability"} icon="box" tone="amber" />
-          <StatCard label="CONTRIBUTION / ORDER" value={fmt(metricValue(dashboard.metrics, "contribution_per_order"), 2)} suffix={generated.simulation ? " Rs" : ""} sub={generated.simulation ? `Net cost ${fmt(metrics.net_cost_per_order, 2)} Rs / order` : "After modeled fulfillment costs"} icon="chart" tone="coral" />
-        </section>
-
-        <section id="network" className="primary-grid">
-          <NetworkMap hubs={dashboard.hubs} rdcs={dashboard.rdcs} selectedHub={selectedHub} onSelectHub={setSelectedHub} generated={generated} />
-          <EventFeed alerts={dashboard.alerts} busy={status.running} />
-        </section>
-
-        <section id="service-and-sla" className="secondary-grid">
-          <ServicePanel dashboard={dashboard} />
-          <HubPanel hubs={dashboard.hubs} selectedHub={selectedHub} onSelectHub={setSelectedHub} generated={generated} />
-        </section>
-
-        <section className="feature-grid">
-          <TierPanel tiers={dashboard.tiers} generated={generated} />
-          <BasketPanel dashboard={dashboard} />
-        </section>
-
-        <section className="lower-grid">
-          <OrderTable orders={dashboard.orders} generated={generated} />
-          <ExperimentPanel experiments={dashboard.experiments} generated={generated} />
-        </section>
-
-        <section id="playback" className="playback-grid">
-          <PlaybackPanel alerts={dashboard.alerts} generated={generated} />
-          <aside className="assumptions-panel">
-            <span className="eyebrow">MODEL SCOPE</span>
-            <h3>Assumptions, made visible.</h3>
-            <p>Distances, rider speeds, fees, margins, customer choices, and starting inventory are model inputs—not measured live data.</p>
-            <div className="assumption-pills"><span>20 km/h nominal</span><span>1.4× road circuity</span><span>15 min standard SLA</span></div>
-            <a href="https://github.com/skandanapatil/USML_mini_project" target="_blank" rel="noreferrer">Project source <Icon name="arrow" size={13} /></a>
-          </aside>
-        </section>
-
-        <DataNotes dashboard={dashboard} />
+      <Header page={page} setPage={setPage} />
+      <main>
+        {page === "map" && <ControlMap data={data} clock={clock} setClock={setClock} />}
+        {page === "consolidation" && <Consolidation data={data} />}
+        {page === "inventory" && <Inventory data={data} />}
+        {page === "stress" && <StressTests data={data} />}
+        {page === "playback" && <Playback data={data} clock={clock} setClock={setClock} playing={playing} setPlaying={setPlaying} speed={speed} setSpeed={setSpeed} />}
       </main>
-      <RunDrawer
-        open={drawerOpen}
-        onClose={() => !status.running && setDrawerOpen(false)}
-        onRun={runScenario}
-        busy={status.running}
-        apiOnline={apiOnline}
-        status={status}
-      />
+      <footer>
+        <span>SCM · STATIC RESULTS</span>
+        <button onClick={() => setPage("map")}>Assumptions</button>
+        <span>{formatTime(clock)}</span>
+      </footer>
     </div>
   );
 }

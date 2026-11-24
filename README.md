@@ -1,8 +1,8 @@
 # Self-Healing Quick-Commerce Command Center
 
-This project models a self-healing quick-commerce network in Bengaluru. The React
-dashboard compares the existing baseline and self-healing SLA simulation, visualizes
-the generated hub network, and displays its fulfillment metrics and alert feed.
+This project models a self-healing quick-commerce network in Bengaluru. The Python
+pipeline generates simulated orders, hub-network outputs, and paired baseline versus
+self-healing results. The React dashboard reads those saved outputs.
 
 ## Run the dashboard
 
@@ -14,28 +14,33 @@ If needed, install the Python packages used by the pipeline:
 python -m pip install numpy pandas scikit-learn scipy openpyxl
 ```
 
-1. Start the local dashboard API from the repository root:
+1. Generate the data from the repository root:
 
    ```powershell
-   python backend\dashboard_api.py
+   python backend\run_all.py
+   ```
+
+   This runs the preparation, clustering, substitution, basket, network-demo, and
+   SLA-simulation steps in order. The experiment ladder is optional:
+
+   ```powershell
+   python backend\run_all.py --with-experiments
    ```
 
 2. In another terminal, start the React development server:
 
    ```powershell
-   cd frontend
+   cd F:\USML_mini_project\frontend
    npm install
    npm run dev
    ```
 
-3. Open the Vite URL (usually `http://127.0.0.1:5173`) and select **Run scenario**.
-   The first run prepares the local SKU catalog, clusters demand into hubs, builds
-   product substitutions, and runs the paired SLA simulation. Results are written to
-   the ignored `backend/data/` directory.
+3. Open the Vite URL (usually `http://127.0.0.1:5173`). During development, Vite
+   serves the generated files directly from `backend/data/`. A production build
+   packages the required data files alongside the frontend.
 
-Basket-rule mining and the seven-scenario Monte Carlo experiment ladder are optional
-run settings. Basket mining scans the large Instacart order-products file; the
-experiment ladder takes several minutes.
+Basket-rule mining reads the Instacart order-products file. The optional experiment
+ladder takes several minutes.
 
 ## Data and model notes
 
