@@ -20,6 +20,9 @@ python -m pip install numpy pandas scikit-learn scipy openpyxl
    python backend\run_all.py
    ```
 
+   Generated pipeline files are written to `backend\data`, which the frontend
+   serves from `/data/`.
+
    This runs the preparation, clustering, substitution, basket, network-demo, and
    SLA-simulation steps in order. The experiment ladder is optional:
 
@@ -30,7 +33,7 @@ python -m pip install numpy pandas scikit-learn scipy openpyxl
 2. In another terminal, start the React development server:
 
    ```powershell
-   cd F:\USML_mini_project\frontend
+   cd frontend
    npm install
    npm run dev
    ```

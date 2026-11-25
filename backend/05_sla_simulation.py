@@ -96,9 +96,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 hub_mod = importlib.import_module("04_hub_rerouting")
 HubNetwork, haversine_km, hhmm = hub_mod.HubNetwork, hub_mod.haversine_km, hub_mod.hhmm
 
-# Same folders as quickcommerce_data_prep.py
-RAW_DIR = Path(r"D:\PES study\Sem2\USL\Mini projects\Datasets")
-DATA_DIR = RAW_DIR / "processed"
+DATA_DIR = Path(__file__).resolve().parent / "data"
 
 EXPRESS_CATEGORIES = {"Baby Care"}      # carts containing these are flagged Express automatically
 
@@ -627,7 +625,7 @@ def main():
     ap.add_argument("--p2p-min-units", type=int, default=50, help="smallest load worth a P2P van trip")
     ap.add_argument("--truck-min-gap", type=float, default=60.0, help="minutes between RDC trucks to the same hub")
     ap.add_argument("--addon-accept", type=float, default=0.20, help="share of customers who accept a recipe add-on (0 = off)")
-    ap.add_argument("--sweep", action="store_true", help="also sweep Green adoption 0-100%%")
+    ap.add_argument("--sweep", action="store_true", help="also sweep Green adoption 0-100%")
     ap.add_argument("--resilience", action="store_true", help="gridlock each hub in turn and measure how well neighbours cover for it")
     ap.add_argument("--seed", type=int, default=42)
     cfg = ap.parse_args()
@@ -852,14 +850,14 @@ def main():
     summary.to_csv(out / "sla_sim_summary.csv")
     tier_df.to_csv(out / "sla_tier_summary.csv", index=False)
     alert_df.to_csv(out / "sla_alerts.csv", index=False)
-    tl_h.drop(columns=["created_min"]).to_csv(out / "p2p_transfers.csv", index=False)
+    tl_h.drop(columns=["created_min"], errors="ignore").to_csv(out / "p2p_transfers.csv", index=False)   # empty log (e.g. --no-proactive) has no columns
     repl = pd.concat(repl_logs, ignore_index=True)
     repl.to_csv(out / "replenishment_alerts.csv", index=False)
     tl = timeline_text(heal_df, cfg)
     (out / "sla_timeline_example.txt").write_text(tl, encoding="utf-8")
 
     # replenishment digest
-    hr = repl[repl["mode"] == "self_healing"]
+    hr = repl[repl["mode"] == "self_healing"] if "mode" in repl.columns else repl.iloc[0:0]   # no trucks (e.g. --no-replenishment): empty log has no columns
     if len(hr):
         print("\nReplenishment trucks needed (self-healing run), by hub:")
         print(hr.groupby("hub_id").agg(trucks=("wave_id", "count"), units=("units", "sum"),

@@ -37,9 +37,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# Same folders as quickcommerce_data_prep.py
-RAW_DIR = Path(r"D:\PES study\Sem2\USL\Mini projects\Datasets")
-DATA_DIR = RAW_DIR / "processed"
+DATA_DIR = Path(__file__).resolve().parent / "data"
 from scipy.spatial import ConvexHull
 from sklearn.cluster import AgglomerativeClustering, DBSCAN, KMeans
 from sklearn.metrics import silhouette_score

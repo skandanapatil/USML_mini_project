@@ -45,9 +45,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# Same folders as quickcommerce_data_prep.py
-RAW_DIR = Path(r"D:\PES study\Sem2\USL\Mini projects\Datasets")
-DATA_DIR = RAW_DIR / "processed"
+HERE = Path(__file__).resolve().parent
+RAW_DIR = HERE.parent / "dataset"
+DATA_DIR = HERE / "data"
 
 # Instacart department -> quick-commerce category (None = left out)
 DEPT_TO_CATEGORY = {

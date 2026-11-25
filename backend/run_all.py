@@ -11,8 +11,8 @@ run_all.py - runs the whole mini-project pipeline in order.
   7. 06_experiments.py            stress ladder with 10 random seeds, confidence intervals, PDF summary
                                   (opt-in: python run_all.py --with-experiments; takes several minutes)
 
-Put this file in the backend folder. Inputs are read from the repository's dataset/
-folder, and generated files are written to backend/data/.
+Run this file from the repository root or backend folder. Inputs are read from
+the repository's dataset/ folder; generated files are written to backend/data/.
 
 Usage
   python run_all.py                       # everything
@@ -29,24 +29,15 @@ import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parent
-DATASET_DIR = ROOT / "dataset"
-DATA_DIR = HERE / "data"
 
 STEPS = [
-    ("prep", "quickcommerce_data_prep.py", [
-        "--pincodes", str(DATASET_DIR / "BangaloreAreaLatLongDetails.xlsx"),
-        "--bigbasket", str(DATASET_DIR / "BigBasket Products.csv"),
-        "--out-dir", str(DATA_DIR),
-    ]),
-    ("cluster", "01_spatial_clustering.py", ["--data-dir", str(DATA_DIR), "--plot"]),
-    ("subs", "02_substitution_engine.py", ["--data-dir", str(DATA_DIR), "--demo"]),
-    ("basket", "03_basket_affinity.py", [
-        "--instacart-dir", str(DATASET_DIR), "--out-dir", str(DATA_DIR), "--demo",
-    ]),
-    ("reroute", "04_hub_rerouting.py", ["--data-dir", str(DATA_DIR)]),
-    ("sla", "05_sla_simulation.py", ["--data-dir", str(DATA_DIR), "--out-dir", str(DATA_DIR)]),
-    ("experiments", "06_experiments.py", ["--data-dir", str(DATA_DIR)]),
+    ("prep",    "quickcommerce_data_prep.py", []),
+    ("cluster", "01_spatial_clustering.py",   ["--plot"]),
+    ("subs",    "02_substitution_engine.py",  ["--demo"]),
+    ("basket",  "03_basket_affinity.py",      ["--demo"]),
+    ("reroute", "04_hub_rerouting.py",        []),
+    ("sla",     "05_sla_simulation.py",       []),
+    ("experiments", "06_experiments.py",      []),
 ]
 OPT_IN = {"experiments"}
 

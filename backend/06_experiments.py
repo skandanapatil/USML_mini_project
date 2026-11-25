@@ -42,10 +42,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# Same folders as quickcommerce_data_prep.py
-RAW_DIR = Path(r"D:\PES study\Sem2\USL\Mini projects\Datasets")
-DATA_DIR = RAW_DIR / "processed"
 HERE = Path(__file__).resolve().parent
+DATA_DIR = HERE / "data"
 
 SCENARIOS = [
     ("1 Normal peak hour",               ["--surge", "1.0", "--gridlock-hub", "none"]),
