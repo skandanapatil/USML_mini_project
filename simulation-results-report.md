@@ -32,6 +32,8 @@ The dashboard reports **59.3% of modeled orders within 2 km** of a hub under its
 
 The control-loop panel depends on the selected simulation time. At 18:00 it may show no alerts; advancing Playback can reveal later events.
 
+![Control map tab showing the network overview and coverage measure](report-assets/control-map.png)
+
 ## 2. Consolidation
 
 ### What it shows
@@ -66,6 +68,8 @@ Other displayed actions include 177 accepted recipe add-ons out of 957 offers, a
 
 **Assessment: mixed.** Fewer trips and higher modeled contribution are positive; slower deliveries and weaker performance against a fixed deadline are negative.
 
+![Consolidation tab with self-healing KPIs, tier performance, actions, and incentive sweep](report-assets/consolidation.png)
+
 ## 3. RDC inventory
 
 ### What it shows
@@ -79,6 +83,8 @@ For the currently selected **MH-05**, the dashboard reports **445 orders served*
 - **Limit:** This is a stock-out response view, not a live inventory balance or proof that a real transfer could arrive on time.
 
 The “good” or “bad” outcome depends on whether the particular substitute, transfer, or item drop is acceptable and economical.
+
+![RDC inventory tab for MH-05, including stock-out responses and transfers](report-assets/rdc-inventory.png)
 
 ## 4. Stress tests
 
@@ -96,6 +102,8 @@ Examples from the current stress-test results:
 
 **Assessment: conditionally positive, with important limits.** Self-healing helps in some modeled disruptions, but it does not solve extreme conditions. Three seeds are not enough to treat these values as dependable forecasts.
 
+![Stress-test results tab; numeric comparisons are transcribed in the report above](report-assets/stress-tests.png)
+
 ## 5. Playback
 
 ### What it shows
@@ -104,7 +112,11 @@ Playback moves through the saved scenario timeline. It shows active orders and e
 
 At 18:00, the dashboard shows zero active orders and zero events. That describes the selected point in the timeline; it does not mean the entire simulation had no events. Advancing the slider or pressing play shows later saved activity.
 
+At the end of the available playback timeline (**21:13**), the dashboard reports **2 reroutes, 19 P2P transfers, 61 trucks, 177 add-ons, and 320 fired events**. There are no active orders at that exact clock position. These are accumulated event counts in the saved scenario, not live operational counts.
+
 **Assessment:** useful for understanding when the model triggers actions. It is a replay of static scenario data, not live operations monitoring.
+
+![Playback event-feed excerpt at 21:13](report-assets/playback-events.png)
 
 ## Overall conclusion
 
