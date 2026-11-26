@@ -1,0 +1,20 @@
+mode,transfer_id,donor_hub,receiver_hub,triggered_at,arrives,road_km,lines,units,low_stock_lines,projected_stockout_lines,message
+self_healing,P2P-001,MH-02,MH-01,18:00:00,18:28:28,4.3,64,128,0,64,P2P transfer triggered: rebalance 64 SKUs (e.g. SKU01850) from MH-02 to MH-01
+self_healing,P2P-002,MH-12,MH-02,18:00:00,18:18:55,2.6,55,110,0,55,P2P transfer triggered: rebalance 55 SKUs (e.g. SKU01852) from MH-12 to MH-02
+self_healing,P2P-003,MH-05,MH-03,18:00:00,18:20:18,2.8,65,135,0,65,P2P transfer triggered: rebalance 65 SKUs (e.g. SKU01852) from MH-05 to MH-03
+self_healing,P2P-004,MH-05,MH-04,18:00:00,18:29:15,4.4,60,121,0,60,P2P transfer triggered: rebalance 60 SKUs (e.g. SKU01851) from MH-05 to MH-04
+self_healing,P2P-005,MH-03,MH-05,18:00:00,18:20:18,2.8,61,122,0,61,P2P transfer triggered: rebalance 61 SKUs (e.g. SKU02351) from MH-03 to MH-05
+self_healing,P2P-006,MH-07,MH-06,18:00:00,18:18:37,2.5,53,106,0,53,P2P transfer triggered: rebalance 53 SKUs (e.g. SKU01699) from MH-07 to MH-06
+self_healing,P2P-007,MH-06,MH-07,18:00:00,18:18:37,2.5,56,113,0,56,P2P transfer triggered: rebalance 56 SKUs (e.g. SKU02432) from MH-06 to MH-07
+self_healing,P2P-008,MH-09,MH-08,18:00:00,18:40:40,6.5,69,138,0,69,P2P transfer triggered: rebalance 69 SKUs (e.g. SKU01785) from MH-09 to MH-08
+self_healing,P2P-009,MH-10,MH-09,18:00:00,18:22:46,3.3,65,130,0,65,P2P transfer triggered: rebalance 65 SKUs (e.g. SKU00013) from MH-10 to MH-09
+self_healing,P2P-010,MH-09,MH-10,18:00:00,18:22:46,3.3,66,129,0,66,P2P transfer triggered: rebalance 66 SKUs (e.g. SKU01850) from MH-09 to MH-10
+self_healing,P2P-011,MH-02,MH-12,18:00:00,18:18:55,2.6,53,106,0,53,P2P transfer triggered: rebalance 53 SKUs (e.g. SKU01577) from MH-02 to MH-12
+self_healing,P2P-012,MH-14,MH-13,18:00:00,18:18:35,2.5,63,126,0,63,P2P transfer triggered: rebalance 63 SKUs (e.g. SKU01577) from MH-14 to MH-13
+self_healing,P2P-013,MH-13,MH-14,18:00:00,18:18:35,2.5,52,104,0,52,P2P transfer triggered: rebalance 52 SKUs (e.g. SKU00963) from MH-13 to MH-14
+self_healing,P2P-014,MH-13,MH-15,18:00:00,18:22:49,3.3,61,120,0,61,P2P transfer triggered: rebalance 61 SKUs (e.g. SKU01785) from MH-13 to MH-15
+self_healing,P2P-015,MH-18,MH-16,18:00:00,18:22:51,3.3,62,125,0,62,P2P transfer triggered: rebalance 62 SKUs (e.g. SKU01851) from MH-18 to MH-16
+self_healing,P2P-016,MH-05,MH-17,18:00:00,18:26:51,4.0,70,138,0,70,P2P transfer triggered: rebalance 70 SKUs (e.g. SKU01813) from MH-05 to MH-17
+self_healing,P2P-017,MH-16,MH-18,18:00:00,18:22:51,3.3,57,114,0,57,P2P transfer triggered: rebalance 57 SKUs (e.g. SKU01785) from MH-16 to MH-18
+self_healing,P2P-018,MH-20,MH-19,18:00:00,18:22:54,3.3,51,102,0,51,P2P transfer triggered: rebalance 51 SKUs (e.g. SKU00046) from MH-20 to MH-19
+self_healing,P2P-019,MH-19,MH-20,18:00:00,18:22:54,3.3,69,136,0,69,P2P transfer triggered: rebalance 69 SKUs (e.g. SKU00646) from MH-19 to MH-20

@@ -1,0 +1,14 @@
+GREEN / CONSOLIDATED order ORD003726 at hub MH-04, placed 18:00:26  (promised SLA 20 min = 15 + 5 for choosing Green; incentive rule: conditional)
+
+[0:00] Order placed -> enters 5-min micro-batch buffer window
+[3:43] Neighbor order ORD007204 detected (within 1 km) -> batched into single courier payload (consolidated)
+[7:30] Picked & packed at micro-hub -> single-bag manifest finalized (2 orders)
+[11:30] Delivered to customer doorstep -> SLA met [GREEN]
+        Incentive: Rs 5 credited (conditional rule; batch of 2, SLA met)
+
+EXPRESS order ORD003202 at hub MH-03, placed 18:01:26  (promised SLA 15 min)
+
+[0:00] Order placed -> flagged Express, bypasses the micro-batch buffer
+[2:30] Picked & packed at micro-hub -> single-order manifest
+[2:30] Immediate single-rider dispatch
+[4:52] Delivered to customer doorstep -> SLA met [GREEN]

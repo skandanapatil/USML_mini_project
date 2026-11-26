@@ -25,14 +25,14 @@ quickcommerce_data_prep.py   simulated orders + SKU master catalogue
 05_sla_simulation.py         one scenario, baseline vs self-healing
 06_experiments.py            stress ladder, resumable, writes the PDF summary
 run_all.py                   runs the steps in order
-data/                        generated results served by the frontend
+static_results/              precomputed results used by the frontend
 ```
 
 ## Setup
 
 Python 3.10+ and: `numpy pandas scikit-learn scipy openpyxl` (`matplotlib` is optional, for the cluster map).
 
-Raw datasets are stored in the repository's `dataset/` folder. Pipeline outputs are written to `backend/data/`, the directory served by the frontend. The exact input file names are listed in `quickcommerce_data_prep.py`.
+The raw datasets are not included. Set `RAW_DIR` to `E:\USML_mini_project\dataset` for source data and `DATA_DIR` to `E:\USML_mini_project\backend\data` for processed output at the top of each script. The exact input file names are listed in `quickcommerce_data_prep.py`. You need the Instacart Market Basket data, the Bangalore areas file and the product catalogue.
 
 ## Run
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Optional what-if runs of 05_sla_simulation.py. Each writes into data/extra_tests/<name>/.
+# Optional what-if runs of 05_sla_simulation.py. Each writes into extra_tests/<name>/.
 # None of these are needed by the docs; they test the report's untested suggestions and assumptions.
 # Not run by Claude (the data files are on your computer). Run from the folder holding 05_sla_simulation.py.
 FAILED=""
-run () { name="$1"; shift; echo "== $name: $*"; python 05_sla_simulation.py --out-dir "data/extra_tests/$name" "$@" || { echo "!! $name FAILED"; FAILED="$FAILED $name"; }; }
+run () { name="$1"; shift; echo "== $name: $*"; python 05_sla_simulation.py --out-dir "extra_tests/$name" "$@" || { echo "!! $name FAILED"; FAILED="$FAILED $name"; }; }
 
 # Green wait (report suggests a shorter window to cut P90)
 run window_1min      --window 1

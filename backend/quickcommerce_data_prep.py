@@ -26,12 +26,12 @@ import numpy as np
 import pandas as pd
 
 # ---------------------------------------------------------------- PATHS
-# Keep source datasets in the repository dataset folder and generated files in backend/data.
-HERE = Path(__file__).resolve().parent
-RAW_DIR = HERE.parent / "dataset"
+# Edit these once; the other scripts (01, 02, 03) use the same folders.
+RAW_DIR = Path(r"E:\USML_mini_project\dataset")
+DATA_DIR = Path(r"E:\USML_mini_project\backend\data")
 PINCODE_FILE = RAW_DIR / "BangaloreAreaLatLongDetails.xlsx"
 BIGBASKET_FILE = RAW_DIR / "BigBasket Products.csv"
-OUT_DIR = HERE / "data"
+OUT_DIR = DATA_DIR
 
 # --------------------------------------------------------------------------
 # PART A: simulated order coordinates

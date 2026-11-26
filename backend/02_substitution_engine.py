@@ -42,7 +42,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-DATA_DIR = Path(__file__).resolve().parent / "data"
+# Same folders as quickcommerce_data_prep.py
+RAW_DIR = Path(r"E:\USML_mini_project\dataset")
+DATA_DIR = Path(r"E:\USML_mini_project\backend\data")
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 MARGIN_CEILING = 35.0

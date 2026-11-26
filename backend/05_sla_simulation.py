@@ -96,7 +96,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 hub_mod = importlib.import_module("04_hub_rerouting")
 HubNetwork, haversine_km, hhmm = hub_mod.HubNetwork, hub_mod.haversine_km, hub_mod.hhmm
 
-DATA_DIR = Path(__file__).resolve().parent / "data"
+# Same folders as quickcommerce_data_prep.py
+RAW_DIR = Path(r"E:\USML_mini_project\dataset")
+DATA_DIR = Path(r"E:\USML_mini_project\backend\data")
 
 EXPRESS_CATEGORIES = {"Baby Care"}      # carts containing these are flagged Express automatically
 

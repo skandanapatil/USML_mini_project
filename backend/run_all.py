@@ -11,8 +11,8 @@ run_all.py - runs the whole mini-project pipeline in order.
   7. 06_experiments.py            stress ladder with 10 random seeds, confidence intervals, PDF summary
                                   (opt-in: python run_all.py --with-experiments; takes several minutes)
 
-Run this file from the repository root or backend folder. Inputs are read from
-the repository's dataset/ folder; generated files are written to backend/data/.
+Put this file in the same folder as the other scripts. File locations are set at the top
+of each script (RAW_DIR); nothing else needs to be typed.
 
 Usage
   python run_all.py                       # everything

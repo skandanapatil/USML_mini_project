@@ -1,14 +1,9 @@
-"""Collect test summaries from backend/data/extra_tests into backend/data."""
+"""Collect sla_sim_summary.csv from every extra_tests/<name>/ into one table: extra_tests_summary.csv."""
 from pathlib import Path
 import pandas as pd
 
-HERE = Path(__file__).resolve().parent
-TEST_DIR = HERE / "data" / "extra_tests"
-DATA_DIR = HERE / "data"
-DATA_DIR.mkdir(parents=True, exist_ok=True)
-
 rows = []
-for d in sorted(TEST_DIR.glob("*/")):
+for d in sorted(Path("extra_tests").glob("*/")):
     f = d / "sla_sim_summary.csv"
     if not f.exists():
         continue
@@ -20,5 +15,5 @@ for d in sorted(TEST_DIR.glob("*/")):
                  "contribution_per_order": sh["contribution_per_order"], "stockout_events": sh["stockout_events"],
                  "addon_accepted": sh["addon_accepted"], "p2p_transfers": sh["p2p_transfers"]})
 out = pd.DataFrame(rows)
-out.to_csv(DATA_DIR / "extra_tests_summary.csv", index=False)
+out.to_csv("extra_tests_summary.csv", index=False)
 print(out.to_string(index=False))

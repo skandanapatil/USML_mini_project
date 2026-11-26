@@ -1,0 +1,4 @@
+tier,orders,avg_min_baseline,avg_min_healing,promised_sla_min,sla_met_pct_healing,standard_sla_met_pct_healing,avg_batch_size
+express,130,16.7,11.5,15.0,80.8,80.8,1.0
+instant,1127,16.9,10.8,15.0,82.2,82.2,1.0
+green,2083,17.1,14.7,20.0,85.5,61.0,2.28

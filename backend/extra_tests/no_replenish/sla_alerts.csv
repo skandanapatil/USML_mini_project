@@ -1,0 +1,292 @@
+time,type,hub,message
+18:00:05,P2P_REBALANCE,MH-01,"P2P transfer triggered: rebalance 64 SKUs (e.g. SKU01850) from MH-02 to MH-01; 128 units, arrives 18:28:33"
+18:00:05,P2P_REBALANCE,MH-02,"P2P transfer triggered: rebalance 55 SKUs (e.g. SKU01852) from MH-12 to MH-02; 110 units, arrives 18:19:00"
+18:00:05,P2P_REBALANCE,MH-03,"P2P transfer triggered: rebalance 65 SKUs (e.g. SKU01852) from MH-05 to MH-03; 130 units, arrives 18:20:23"
+18:00:05,P2P_REBALANCE,MH-04,"P2P transfer triggered: rebalance 60 SKUs (e.g. SKU01851) from MH-05 to MH-04; 120 units, arrives 18:29:20"
+18:00:05,P2P_REBALANCE,MH-05,"P2P transfer triggered: rebalance 61 SKUs (e.g. SKU02351) from MH-03 to MH-05; 122 units, arrives 18:20:23"
+18:00:05,P2P_REBALANCE,MH-06,"P2P transfer triggered: rebalance 53 SKUs (e.g. SKU01699) from MH-07 to MH-06; 106 units, arrives 18:18:42"
+18:00:05,P2P_REBALANCE,MH-07,"P2P transfer triggered: rebalance 56 SKUs (e.g. SKU02432) from MH-06 to MH-07; 111 units, arrives 18:18:42"
+18:00:05,P2P_REBALANCE,MH-08,"P2P transfer triggered: rebalance 69 SKUs (e.g. SKU01785) from MH-09 to MH-08; 138 units, arrives 18:40:45"
+18:00:05,P2P_REBALANCE,MH-09,"P2P transfer triggered: rebalance 65 SKUs (e.g. SKU00013) from MH-10 to MH-09; 130 units, arrives 18:22:51"
+18:00:05,P2P_REBALANCE,MH-10,"P2P transfer triggered: rebalance 66 SKUs (e.g. SKU01850) from MH-09 to MH-10; 129 units, arrives 18:22:51"
+18:00:05,P2P_REBALANCE,MH-12,"P2P transfer triggered: rebalance 53 SKUs (e.g. SKU01577) from MH-02 to MH-12; 106 units, arrives 18:19:00"
+18:00:05,P2P_REBALANCE,MH-13,"P2P transfer triggered: rebalance 63 SKUs (e.g. SKU01577) from MH-14 to MH-13; 126 units, arrives 18:18:40"
+18:00:05,P2P_REBALANCE,MH-14,"P2P transfer triggered: rebalance 52 SKUs (e.g. SKU00963) from MH-13 to MH-14; 104 units, arrives 18:18:40"
+18:00:05,P2P_REBALANCE,MH-15,"P2P transfer triggered: rebalance 61 SKUs (e.g. SKU01785) from MH-13 to MH-15; 120 units, arrives 18:22:54"
+18:00:05,P2P_REBALANCE,MH-16,"P2P transfer triggered: rebalance 62 SKUs (e.g. SKU01851) from MH-18 to MH-16; 124 units, arrives 18:22:56"
+18:00:05,P2P_REBALANCE,MH-17,"P2P transfer triggered: rebalance 70 SKUs (e.g. SKU01813) from MH-05 to MH-17; 138 units, arrives 18:26:56"
+18:00:05,P2P_REBALANCE,MH-18,"P2P transfer triggered: rebalance 57 SKUs (e.g. SKU01785) from MH-16 to MH-18; 114 units, arrives 18:22:56"
+18:00:05,P2P_REBALANCE,MH-19,"P2P transfer triggered: rebalance 51 SKUs (e.g. SKU00046) from MH-20 to MH-19; 102 units, arrives 18:22:59"
+18:00:05,P2P_REBALANCE,MH-20,"P2P transfer triggered: rebalance 69 SKUs (e.g. SKU00646) from MH-19 to MH-20; 136 units, arrives 18:22:59"
+18:00:30,ADDON_ACCEPTED,MH-17,"Missing bread? 1-click add of White Sandwich Bread - Safe, Preservative Free [SKU00462] (suggested because of packaged cheese)"
+18:00:44,ADDON_ACCEPTED,MH-17,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of coffee + fresh fruits)
+18:01:11,STOCKOUT_SUBSTITUTE,MH-06,"Almond Milk - Unsweetened, Dairy Free [SKU00808] -> margin-optimised alternative Coconut Milk Yogurt - Unsweetened, Dairy Free [SKU00809]"
+18:01:16,ADDON_ACCEPTED,MH-02,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings)"
+18:01:16,ITEM_DROPPED_BY_PREFERENCE,MH-02,Traditional Filter Coffee Decoction [SKU00112] out of stock; customer preference is drop item
+18:01:17,STOCKOUT_SUBSTITUTE,MH-15,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+18:03:05,ADDON_ACCEPTED,MH-06,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + soft drinks)
+18:03:36,ADDON_ACCEPTED,MH-11,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of baby food formula)
+18:03:47,STOCKOUT_SUBSTITUTE,MH-05,"Peanut Butter With Dark chocolate [SKU01552] -> margin-optimised alternative Peanut Butter - Dark Chocolate, 80% Peanut [SKU01535]"
+18:04:37,ADDON_ACCEPTED,MH-17,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of milk + water seltzer sparkling water)
+18:04:37,STOCKOUT_SUBSTITUTE,MH-17,Natural Mineral Water [SKU00424] -> margin-optimised alternative Natural Mountain Water - Vedica [SKU00423]
+18:04:47,STOCKOUT_SUBSTITUTE,MH-09,Banana Milk Shake [SKU00605] -> margin-optimised alternative Coffee Milk Shake [SKU00769]
+18:04:52,ADDON_ACCEPTED,MH-05,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of dry pasta)"
+18:04:55,ADDON_ACCEPTED,MH-01,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of condiments + fresh fruits)"
+18:05:01,ADDON_ACCEPTED,MH-09,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh vegetables + juice nectars)
+18:05:06,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:05:08,STOCKOUT_SUBSTITUTE,MH-17,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+18:05:26,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:08:15,ADDON_ACCEPTED,MH-02,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of baby food formula + packaged cheese)
+18:08:42,ADDON_ACCEPTED,MH-03,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + soft drinks)
+18:10:13,ADDON_ACCEPTED,MH-05,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of frozen appetizers sides)
+18:10:16,ADDON_ACCEPTED,MH-16,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of breakfast bakery + fresh vegetables)
+18:10:46,ADDON_ACCEPTED,MH-19,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of cereal)
+18:10:56,ADDON_ACCEPTED,MH-07,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + hot dogs bacon sausage)
+18:12:05,ITEM_DROPPED_BY_PREFERENCE,MH-19,Apricot - Dried [SKU00872] out of stock; customer preference is drop item
+18:12:28,STOCKOUT_SOURCING,MH-09,Water-based Electrolyte Drink [SKU00421] sourced from adjacent hub MH-10 (3.26 road km)
+18:13:01,ADDON_ACCEPTED,MH-06,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of cereal)
+18:13:03,STOCKOUT_SUBSTITUTE,MH-14,Eggless Pancake Mix [SKU01378] -> margin-optimised alternative Eggless Premium Chocolate Cake Mix [SKU01379]
+18:14:18,ADDON_ACCEPTED,MH-06,"Missing bread? 1-click add of Whole Wheat Bread - Safe, Preservative Free [SKU00464] (suggested because of packaged cheese)"
+18:14:22,ADDON_ACCEPTED,MH-10,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of frozen appetizers sides)
+18:14:35,STOCKOUT_SUBSTITUTE,MH-07,Fresho Signature Plain Bread Stick 100G + Happy Chef Pasta Sauce Arrabiata 270G [SKU00438] -> margin-optimised alternative Lavash - Corn [SKU00430]
+18:14:54,STOCKOUT_SUBSTITUTE,MH-02,Toffee - Kismi [SKU01243] -> margin-optimised alternative Candy - Melody Chocolaty [SKU01241]
+18:16:21,ADDON_ACCEPTED,MH-04,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of instant foods + packaged cheese)
+18:16:21,STOCKOUT_SUBSTITUTE,MH-04,Ready Mix - Dhoka [SKU01368] -> margin-optimised alternative Easy Mix - Palappam [SKU01354]
+18:16:43,STOCKOUT_SUBSTITUTE,MH-08,Processed Cheese - Block [SKU00647] -> margin-optimised alternative Processed Slices [SKU00651]
+18:16:58,STOCKOUT_SUBSTITUTE,MH-09,Seeds - Sabja [SKU02071] -> margin-optimised alternative Certified Organic - Flax Seeds [SKU02048]
+18:17:11,ADDON_ACCEPTED,MH-17,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh vegetables + spreads)
+18:18:19,STOCKOUT_SUBSTITUTE,MH-20,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+18:18:27,STOCKOUT_SUBSTITUTE,MH-17,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+18:18:45,ADDON_ACCEPTED,MH-04,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of chips pretzels + ice cream ice)
+18:18:45,ADDON_ACCEPTED,MH-05,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + yogurt)
+18:19:09,ADDON_ACCEPTED,MH-03,"Missing bread? 1-click add of Whole Wheat Bread - Safe, Preservative Free [SKU00464] (suggested because of eggs)"
+18:19:09,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:19:55,STOCKOUT_SUBSTITUTE,MH-19,"Country Cage Free Eggs - Medium, Antibiotic Residue-Free [SKU00826] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:20:00,ADDON_ACCEPTED,MH-05,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of ice cream ice)
+18:20:24,ADDON_ACCEPTED,MH-03,"Missing bread? 1-click add of Whole Wheat Bread - Safe, Preservative Free [SKU00464] (suggested because of packaged cheese)"
+18:21:49,ADDON_ACCEPTED,MH-03,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of soft drinks)
+18:22:52,ADDON_ACCEPTED,MH-04,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of breakfast bakery + milk)
+18:23:42,STOCKOUT_SUBSTITUTE,MH-05,"Banana - Raw, Sliced [SKU00878] -> margin-optimised alternative Coccinia - Sliced [SKU00886]"
+18:24:29,ADDON_ACCEPTED,MH-03,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of instant foods)
+18:24:55,STOCKOUT_SUBSTITUTE,MH-19,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+18:27:36,ADDON_ACCEPTED,MH-05,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh vegetables + nuts seeds dried fruit)
+18:29:16,ADDON_ACCEPTED,MH-07,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of baby food formula + packaged cheese)
+18:29:23,ADDON_ACCEPTED,MH-15,Missing soy lactosefree? 1-click add of Cashew & Oat Mylk [SKU00810] (suggested because of frozen produce)
+18:32:18,STOCKOUT_SUBSTITUTE,MH-01,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+18:32:36,ADDON_ACCEPTED,MH-12,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh fruits + spreads)
+18:32:39,ADDON_ACCEPTED,MH-18,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of bread + soy lactosefree)
+18:33:41,STOCKOUT_SUBSTITUTE,MH-01,Kool Milk Shake - Badam [SKU00635] -> margin-optimised alternative Kool Milk Shake - Strawberry [SKU00636]
+18:34:05,ADDON_ACCEPTED,MH-04,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of chips pretzels + packaged cheese)
+18:34:20,ADDON_ACCEPTED,MH-03,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of chips pretzels + yogurt)
+18:35:59,ADDON_ACCEPTED,MH-19,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of baking ingredients + fresh vegetables)
+18:36:10,ADDON_ACCEPTED,MH-02,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of grains rice dried goods)"
+18:36:22,ADDON_ACCEPTED,MH-06,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh fruits + milk)
+18:37:37,ADDON_ACCEPTED,MH-15,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of candy chocolate)
+18:37:53,ADDON_ACCEPTED,MH-04,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of soft drinks)
+18:40:17,ADDON_ACCEPTED,MH-07,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of crackers + packaged cheese)
+18:41:14,STOCKOUT_SUBSTITUTE,MH-01,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+18:42:00,ADDON_ACCEPTED,MH-18,Missing soy lactosefree? 1-click add of Cashew & Oat Mylk [SKU00810] (suggested because of frozen produce)
+18:43:47,ADDON_ACCEPTED,MH-17,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of cream)
+18:45:44,ADDON_ACCEPTED,MH-08,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of crackers + frozen produce)"
+18:46:48,STOCKOUT_SUBSTITUTE,MH-04,Masala Lavash [SKU00431] -> margin-optimised alternative Lavash - Corn [SKU00430]
+18:47:01,ADDON_ACCEPTED,MH-04,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + yogurt)
+18:47:55,ITEM_DROPPED_BY_PREFERENCE,MH-01,Cherry [SKU00861] out of stock; customer preference is drop item
+18:48:30,ADDON_ACCEPTED,MH-09,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of eggs + fresh fruits)"
+18:48:48,ADDON_ACCEPTED,MH-03,"Missing bread? 1-click add of Whole Wheat Bread - Safe, Preservative Free [SKU00464] (suggested because of eggs)"
+18:48:48,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:53:58,STOCKOUT_SOURCING,MH-03,Water Plus [SKU00425] sourced from adjacent hub MH-05 (2.8 road km)
+18:54:07,ADDON_ACCEPTED,MH-08,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh fruits + nuts seeds dried fruit)
+18:54:18,ADDON_ACCEPTED,MH-08,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + hot dogs bacon sausage)
+18:54:38,ADDON_ACCEPTED,MH-08,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of fresh fruits + yogurt)
+18:55:25,ADDON_ACCEPTED,MH-16,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of grains rice dried goods)"
+18:55:34,STOCKOUT_SOURCING,MH-17,Natural Mountain Water - Vedica [SKU00423] sourced from adjacent hub MH-05 (4.0 road km)
+18:56:49,ADDON_ACCEPTED,MH-04,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of soft drinks)
+18:57:10,ADDON_ACCEPTED,MH-06,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings + yogurt)"
+18:58:49,ADDON_ACCEPTED,MH-03,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of butter)
+18:59:24,STOCKOUT_SUBSTITUTE,MH-17,Alphabytes [SKU00908] -> margin-optimised alternative Chicken Patty - Desi Style [SKU00909]
+19:00:26,ADDON_ACCEPTED,MH-01,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of meat counter)"
+19:01:15,ADDON_ACCEPTED,MH-03,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of hot dogs bacon sausage)
+19:01:49,ADDON_ACCEPTED,MH-07,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of meat counter)"
+19:02:29,ADDON_ACCEPTED,MH-06,Missing soy lactosefree? 1-click add of Soya Milk - Vanilla [SKU00822] (suggested because of frozen produce)
+19:02:57,ADDON_ACCEPTED,MH-09,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of condiments + fresh vegetables)
+19:03:43,ITEM_DROPPED_BY_PREFERENCE,MH-02,Cherry [SKU00861] out of stock; customer preference is drop item
+19:03:57,ADDON_ACCEPTED,MH-04,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of butter + eggs)"
+19:05:17,ADDON_ACCEPTED,MH-19,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of dry pasta + fresh fruits)"
+19:05:28,STOCKOUT_SUBSTITUTE,MH-05,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+19:06:27,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+19:07:14,ADDON_ACCEPTED,MH-07,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings)"
+19:07:18,ADDON_ACCEPTED,MH-03,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings)"
+19:07:20,ITEM_DROPPED_BY_PREFERENCE,MH-19,Probiotic Yogurt - Strawberry [SKU00685] out of stock; customer preference is drop item
+19:08:44,ADDON_ACCEPTED,MH-16,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of grains rice dried goods)"
+19:09:33,ADDON_ACCEPTED,MH-05,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of cookies cakes)
+19:10:18,ADDON_ACCEPTED,MH-17,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + soft drinks)
+19:14:34,ADDON_ACCEPTED,MH-06,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of breakfast bakery + fresh vegetables)
+19:15:00,GRIDLOCK,MH-05,"GRIDLOCK! MH-05 blocked until 19:45:00: rerouting 2 orders -> MH-03 (1), MH-17 (1); 19 orders stayed (no faster option)"
+19:15:04,STOCKOUT_SUBSTITUTE,MH-17,Alphabytes [SKU00908] -> margin-optimised alternative Chicken Patty - Desi Style [SKU00909]
+19:15:36,ADDON_ACCEPTED,MH-10,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of eggs + fresh fruits)"
+19:15:58,ADDON_ACCEPTED,MH-18,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of chips pretzels + fresh vegetables)
+19:17:32,ADDON_ACCEPTED,MH-15,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh fruits + nuts seeds dried fruit)
+19:18:19,ADDON_ACCEPTED,MH-03,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of milk + yogurt)
+19:18:31,STOCKOUT_SOURCING,MH-03,Water Plus [SKU00425] sourced from adjacent hub MH-04 (5.67 road km)
+19:18:46,ADDON_ACCEPTED,MH-16,"Missing bread? 1-click add of Whole Wheat Bread - Safe, Preservative Free [SKU00464] (suggested because of packaged cheese)"
+19:18:49,ADDON_ACCEPTED,MH-04,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of butter + fresh vegetables)
+19:18:52,ADDON_ACCEPTED,MH-16,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of hot dogs bacon sausage + yogurt)
+19:19:52,ADDON_ACCEPTED,MH-03,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of grains rice dried goods)
+19:19:52,ADDON_ACCEPTED,MH-19,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of hot dogs bacon sausage)
+19:20:26,STOCKOUT_SUBSTITUTE,MH-17,Lia Dua Combi Pack [SKU01082] -> margin-optimised alternative Lia Rainbow Vibran Active Exclusive Fragrance [SKU01083]
+19:21:46,ADDON_ACCEPTED,MH-09,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of baking ingredients + fresh vegetables)
+19:23:19,ADDON_ACCEPTED,MH-13,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh vegetables + nuts seeds dried fruit)
+19:24:08,ADDON_ACCEPTED,MH-12,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of dry pasta + fresh vegetables)
+19:25:06,ADDON_ACCEPTED,MH-16,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of hot dogs bacon sausage + milk)
+19:25:33,ADDON_ACCEPTED,MH-06,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh fruits + spices seasonings)
+19:26:04,ADDON_ACCEPTED,MH-17,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of cream)
+19:27:15,ADDON_ACCEPTED,MH-03,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of cereal)
+19:27:47,ADDON_ACCEPTED,MH-01,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of grains rice dried goods)"
+19:27:50,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+19:28:07,ADDON_ACCEPTED,MH-03,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + frozen appetizers sides)
+19:28:28,ADDON_ACCEPTED,MH-16,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of fresh fruits + packaged cheese)"
+19:28:43,ADDON_ACCEPTED,MH-05,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of meat counter)"
+19:28:50,ITEM_DROPPED_BY_PREFERENCE,MH-19,Apricot - Dried [SKU00872] out of stock; customer preference is drop item
+19:30:36,STOCKOUT_SUBSTITUTE,MH-09,Seeds - Sabja [SKU02071] -> margin-optimised alternative Certified Organic - Flax Seeds [SKU02048]
+19:32:05,STOCKOUT_SOURCING,MH-17,Natural Mountain Water - Vedica [SKU00423] sourced from adjacent hub MH-16 (5.62 road km)
+19:32:24,ITEM_DROPPED_BY_PREFERENCE,MH-05,Water Plus [SKU00425] out of stock; customer preference is drop item
+19:33:06,ADDON_ACCEPTED,MH-03,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of spices seasonings)
+19:33:22,ADDON_ACCEPTED,MH-20,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings)"
+19:33:43,STOCKOUT_SUBSTITUTE,MH-10,Pineapple [SKU00874] -> margin-optimised alternative Baby Corn - Unpeeled [SKU00877]
+19:34:04,ADDON_ACCEPTED,MH-14,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of cereal + fresh fruits)
+19:34:29,STOCKOUT_SUBSTITUTE,MH-04,Urban Musk Eau De Toilette Deodorant - For Man [SKU01796] -> margin-optimised alternative Man - Green Eau De Toilette Deodorant [SKU01795]
+19:35:05,STOCKOUT_SUBSTITUTE,MH-17,Alphabytes [SKU00908] -> margin-optimised alternative Chicken Patty - Desi Style [SKU00909]
+19:36:07,ITEM_DROPPED_BY_PREFERENCE,MH-17,Milkshake - Vanilla Ice Cream Flavour [SKU00718] out of stock; customer preference is drop item
+19:37:11,ADDON_ACCEPTED,MH-19,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of grains rice dried goods)"
+19:37:44,ADDON_ACCEPTED,MH-11,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of milk + spreads)
+19:38:19,ADDON_ACCEPTED,MH-08,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings)"
+19:41:00,ADDON_ACCEPTED,MH-18,"Missing bread? 1-click add of Whole Wheat Bread - Safe, Preservative Free [SKU00464] (suggested because of eggs)"
+19:42:09,ADDON_ACCEPTED,MH-09,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of eggs + packaged cheese)"
+19:42:32,ADDON_ACCEPTED,MH-07,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of cookies cakes)
+19:43:30,ADDON_ACCEPTED,MH-10,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + ice cream ice)
+19:43:35,ADDON_ACCEPTED,MH-10,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + ice cream ice)
+19:44:01,ADDON_ACCEPTED,MH-16,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh fruits + frozen appetizers sides)
+19:44:49,ADDON_ACCEPTED,MH-01,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of milk + packaged cheese)
+19:47:03,ADDON_ACCEPTED,MH-19,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of crackers + fresh vegetables)
+19:47:53,STOCKOUT_SUBSTITUTE,MH-01,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+19:49:09,ADDON_ACCEPTED,MH-18,Missing yogurt? 1-click add of Fresh Natural Thick Curd [SKU00783] (suggested because of bread + packaged cheese)
+19:49:55,ADDON_ACCEPTED,MH-18,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings)"
+19:50:22,STOCKOUT_SUBSTITUTE,MH-03,Dairy Whitener [SKU00660] -> margin-optimised alternative Milkmaid Sweetened Condensed Milk [SKU00738]
+19:50:24,ADDON_ACCEPTED,MH-01,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of cream + yogurt)
+19:50:35,ADDON_ACCEPTED,MH-04,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of butter + fresh fruits)"
+19:51:05,ADDON_ACCEPTED,MH-18,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings)"
+19:51:16,ADDON_ACCEPTED,MH-01,"Missing bread? 1-click add of Whole Wheat Bread - Safe, Preservative Free [SKU00464] (suggested because of eggs)"
+19:51:53,ADDON_ACCEPTED,MH-15,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of grains rice dried goods + yogurt)
+19:52:42,STOCKOUT_SUBSTITUTE,MH-14,Soya Milk - Chocolate [SKU00820] -> margin-optimised alternative Drink - Original [SKU00816]
+19:52:51,STOCKOUT_SOURCING,MH-13,Water Plus [SKU00425] sourced from adjacent hub MH-14 (2.49 road km)
+19:53:04,ADDON_ACCEPTED,MH-04,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of ice cream ice + yogurt)
+19:53:30,STOCKOUT_SOURCING,MH-09,Water-based Electrolyte Drink [SKU00421] sourced from adjacent hub MH-10 (3.26 road km)
+19:54:22,ITEM_DROPPED_BY_PREFERENCE,MH-17,Milkshake - Vanilla Ice Cream Flavour [SKU00718] out of stock; customer preference is drop item
+19:54:36,ADDON_ACCEPTED,MH-01,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of butter + fresh vegetables)
+19:55:07,STOCKOUT_SUBSTITUTE,MH-18,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+19:55:29,ADDON_ACCEPTED,MH-01,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of cream)
+19:56:38,ADDON_ACCEPTED,MH-05,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of baby food formula)
+19:57:43,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+19:58:23,ADDON_ACCEPTED,MH-17,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of breakfast bakery)
+19:58:26,ADDON_ACCEPTED,MH-01,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of condiments + packaged cheese)
+19:59:00,ADDON_ACCEPTED,MH-10,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of butter + fresh vegetables)
+19:59:45,ADDON_ACCEPTED,MH-09,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh vegetables + packaged cheese)
+19:59:55,ADDON_ACCEPTED,MH-16,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of bread + fresh vegetables)
+20:00:00,ADDON_ACCEPTED,MH-09,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of crackers + milk)
+20:00:48,ADDON_ACCEPTED,MH-07,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of eggs + fresh fruits)
+20:02:16,ADDON_ACCEPTED,MH-03,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of baking ingredients + packaged cheese)
+20:02:40,ITEM_DROPPED_BY_PREFERENCE,MH-06,Natural Mineral Water [SKU00424] out of stock; customer preference is drop item
+20:02:40,ITEM_DROPPED_BY_PREFERENCE,MH-06,Probiotic Yogurt - Vanilla Bean [SKU00686] out of stock; customer preference is drop item
+20:03:08,STOCKOUT_SUBSTITUTE,MH-16,Natural Mountain Water - Vedica [SKU00423] -> margin-optimised alternative Natural Mineral Water [SKU00424]
+20:03:19,ADDON_ACCEPTED,MH-09,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of meat counter)"
+20:04:09,ADDON_ACCEPTED,MH-18,Missing yogurt? 1-click add of Fresh Natural Thick Curd [SKU00783] (suggested because of fresh vegetables + packaged cheese)
+20:04:54,STOCKOUT_SUBSTITUTE,MH-19,Apricot - Dried [SKU00872] -> margin-optimised alternative Kesar Mango [SKU00873]
+20:05:25,ADDON_ACCEPTED,MH-18,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of soft drinks)
+20:06:50,ADDON_ACCEPTED,MH-12,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of butter)
+20:06:57,ITEM_DROPPED_BY_PREFERENCE,MH-03,Frozen Sweet Corn [SKU00903] out of stock; customer preference is drop item
+20:07:40,STOCKOUT_SUBSTITUTE,MH-02,Natural Mineral Water [SKU00424] -> margin-optimised alternative Natural Mountain Water - Vedica [SKU00423]
+20:07:51,ADDON_ACCEPTED,MH-01,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of cookies cakes)
+20:09:02,STOCKOUT_SUBSTITUTE,MH-16,Natural Mountain Water - Vedica [SKU00423] -> margin-optimised alternative Natural Mineral Water [SKU00424]
+20:09:21,STOCKOUT_SUBSTITUTE,MH-01,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:10:38,ADDON_ACCEPTED,MH-08,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of cookies cakes)
+20:11:32,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+20:11:59,STOCKOUT_SOURCING,MH-05,Water Plus [SKU00425] sourced from adjacent hub MH-17 (4.0 road km)
+20:13:42,ADDON_ACCEPTED,MH-11,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of bread)
+20:16:06,ADDON_ACCEPTED,MH-01,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of fresh fruits + spices seasonings)
+20:16:13,ITEM_DROPPED_BY_PREFERENCE,MH-17,Cherry [SKU00861] out of stock; customer preference is drop item
+20:16:56,ADDON_ACCEPTED,MH-18,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of instant foods)
+20:16:56,STOCKOUT_SUBSTITUTE,MH-18,Frozen Sweet Corn [SKU00903] -> margin-optimised alternative 4 Cheese Pizza [SKU00901]
+20:19:08,ADDON_ACCEPTED,MH-03,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of crackers + packaged cheese)
+20:19:50,ADDON_ACCEPTED,MH-04,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of butter + packaged cheese)
+20:20:23,ADDON_ACCEPTED,MH-10,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh vegetables + milk)
+20:20:37,STOCKOUT_SUBSTITUTE,MH-03,Strawberry Milkshake [SKU00677] -> margin-optimised alternative Milkshake - Kaju Butterscoth [SKU00674]
+20:21:36,STOCKOUT_SOURCING,MH-16,Natural Mountain Water - Vedica [SKU00423] sourced from adjacent hub MH-18 (3.27 road km)
+20:21:47,ADDON_ACCEPTED,MH-18,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of grains rice dried goods)
+20:22:51,ADDON_ACCEPTED,MH-05,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of butter + fresh fruits)
+20:23:52,ADDON_ACCEPTED,MH-06,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of baking ingredients + fresh vegetables)
+20:24:42,ADDON_ACCEPTED,MH-12,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + frozen produce)
+20:24:53,ADDON_ACCEPTED,MH-03,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of milk + yogurt)
+20:24:59,ADDON_ACCEPTED,MH-09,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of grains rice dried goods + packaged cheese)"
+20:25:55,STOCKOUT_SUBSTITUTE,MH-05,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:26:31,ADDON_ACCEPTED,MH-08,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh fruits + instant foods)
+20:26:37,STOCKOUT_SUBSTITUTE,MH-16,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+20:26:39,ITEM_DROPPED_BY_PREFERENCE,MH-15,Probiotic Curd [SKU00728] out of stock; customer preference is drop item
+20:27:27,ADDON_ACCEPTED,MH-15,Missing fresh vegetables? 1-click add of Yellow Pumpkin - Avial Cut [SKU00855] (suggested because of grains rice dried goods)
+20:27:45,ADDON_ACCEPTED,MH-01,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of dry pasta)
+20:28:08,ADDON_ACCEPTED,MH-02,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh fruits + frozen appetizers sides)
+20:28:08,STOCKOUT_SUBSTITUTE,MH-02,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:28:34,ADDON_ACCEPTED,MH-09,Missing soy lactosefree? 1-click add of Cashew & Oat Mylk [SKU00810] (suggested because of frozen produce)
+20:29:13,STOCKOUT_SUBSTITUTE,MH-05,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+20:29:20,ADDON_ACCEPTED,MH-02,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of fresh fruits + frozen produce)"
+20:29:21,ADDON_ACCEPTED,MH-04,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of cookies cakes)
+20:29:21,ADDON_ACCEPTED,MH-17,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of dry pasta)"
+20:29:37,ADDON_ACCEPTED,MH-04,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of milk + yogurt)
+20:31:51,STOCKOUT_SUBSTITUTE,MH-05,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+20:34:07,ADDON_ACCEPTED,MH-09,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of bread)
+20:35:44,ADDON_ACCEPTED,MH-03,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of grains rice dried goods)
+20:35:57,STOCKOUT_SUBSTITUTE,MH-19,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+20:36:08,ADDON_ACCEPTED,MH-17,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + yogurt)
+20:36:08,STOCKOUT_SUBSTITUTE,MH-17,Probiotic Yogurt - Alphonso Mango [SKU00684] -> margin-optimised alternative Probiotic Yogurt - Strawberry [SKU00685]
+20:37:16,ADDON_ACCEPTED,MH-18,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of pickled goods olives)
+20:37:26,ADDON_ACCEPTED,MH-04,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of meat counter)
+20:38:01,ADDON_ACCEPTED,MH-03,Missing chips pretzels? 1-click add of Bhakhri Baked Mathri - Methi [SKU01497] (suggested because of soft drinks)
+20:38:34,STOCKOUT_SUBSTITUTE,MH-17,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:38:56,ADDON_ACCEPTED,MH-18,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of condiments + fresh vegetables)
+20:38:56,ITEM_DROPPED_BY_PREFERENCE,MH-18,Frozen Sweet Corn [SKU00903] out of stock; customer preference is drop item
+20:39:07,ADDON_ACCEPTED,MH-07,"Missing bread? 1-click add of Whole Wheat Bread - Safe, Preservative Free [SKU00464] (suggested because of eggs)"
+20:39:10,ADDON_ACCEPTED,MH-17,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + grains rice dried goods)
+20:39:46,STOCKOUT_SOURCING,MH-05,Water-based Electrolyte Drink [SKU00421] sourced from adjacent hub MH-03 (2.8 road km)
+20:39:46,STOCKOUT_SUBSTITUTE,MH-05,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:40:02,STOCKOUT_SUBSTITUTE,MH-16,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+20:40:19,ADDON_ACCEPTED,MH-19,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of crackers + milk)
+20:40:44,ADDON_ACCEPTED,MH-19,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of crackers)
+20:42:03,STOCKOUT_SUBSTITUTE,MH-05,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:42:23,ADDON_ACCEPTED,MH-14,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of fresh vegetables + ice cream ice)
+20:44:10,ADDON_ACCEPTED,MH-03,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of fresh fruits + tea)
+20:44:15,ADDON_ACCEPTED,MH-11,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of eggs + fresh fruits)"
+20:44:15,STOCKOUT_SUBSTITUTE,MH-11,"Pav - Safe, Preservative Free [SKU00457] -> margin-optimised alternative Whole Wheat Bread - Safe, Preservative Free [SKU00464]"
+20:44:18,ADDON_ACCEPTED,MH-07,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of grains rice dried goods)
+20:45:39,ADDON_ACCEPTED,MH-09,Missing yogurt? 1-click add of Probiotic Curd [SKU00728] (suggested because of packaged cheese + water seltzer sparkling water)
+20:46:03,ADDON_ACCEPTED,MH-17,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of eggs + fresh fruits)"
+20:46:51,ADDON_ACCEPTED,MH-06,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of fresh fruits + packaged cheese)"
+20:46:56,STOCKOUT_SUBSTITUTE,MH-19,Probiotic Curd [SKU00728] -> margin-optimised alternative Doodh Shakti Probiotic Butter Spread [SKU00742]
+20:47:34,ADDON_ACCEPTED,MH-08,"Missing fresh vegetables? 1-click add of Capsicum - Green, Organically Grown [SKU00896] (suggested because of spices seasonings)"
+20:48:43,ADDON_ACCEPTED,MH-11,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of frozen appetizers sides)
+20:48:47,ADDON_ACCEPTED,MH-16,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of butter + fresh vegetables)
+20:49:41,ADDON_ACCEPTED,MH-01,Missing fresh vegetables? 1-click add of Yellow Pumpkin - Avial Cut [SKU00855] (suggested because of grains rice dried goods + yogurt)
+20:49:50,STOCKOUT_SOURCING,MH-05,Water Plus [SKU00425] sourced from adjacent hub MH-04 (4.45 road km)
+20:50:00,ADDON_ACCEPTED,MH-18,Missing fresh vegetables? 1-click add of Baby Corn - Unpeeled [SKU00877] (suggested because of meat counter)
+20:51:56,ITEM_DROPPED_BY_PREFERENCE,MH-10,Butter Crunch Cookies [SKU00589] out of stock; customer preference is drop item
+20:52:09,ADDON_ACCEPTED,MH-16,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of spreads + yogurt)
+20:52:09,STOCKOUT_SUBSTITUTE,MH-16,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+20:52:34,ADDON_ACCEPTED,MH-13,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of condiments + fresh vegetables)
+20:53:12,ITEM_DROPPED_BY_PREFERENCE,MH-09,Vegan Pineapple Cake [SKU00807] out of stock; customer preference is drop item
+20:53:18,ADDON_ACCEPTED,MH-17,Missing packaged cheese? 1-click add of Processed Cheese [SKU00646] (suggested because of bread + hot dogs bacon sausage)
+20:53:23,STOCKOUT_SUBSTITUTE,MH-05,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:53:51,ITEM_DROPPED_BY_PREFERENCE,MH-17,Duck Eggs [SKU00827] out of stock; customer preference is drop item
+20:55:53,ADDON_ACCEPTED,MH-07,Missing soy lactosefree? 1-click add of Cashew & Oat Mylk [SKU00810] (suggested because of frozen produce)
+20:56:09,STOCKOUT_SUBSTITUTE,MH-02,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:56:13,STOCKOUT_SOURCING,MH-01,Water Plus [SKU00425] sourced from adjacent hub MH-02 (4.3 road km)
+20:57:48,STOCKOUT_SUBSTITUTE,MH-05,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:58:10,ADDON_ACCEPTED,MH-05,Missing fresh fruits? 1-click add of Pineapple [SKU00874] (suggested because of baby food formula + fresh vegetables)
+20:59:14,ADDON_ACCEPTED,MH-05,Missing milk? 1-click add of Vanilla Milkshake [SKU00657] (suggested because of juice nectars + yogurt)

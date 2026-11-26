@@ -7,7 +7,7 @@ FAILED=""
 for flex in 0 0.25 0.5 0.75 1; do
   name="surge25_flex_${flex}"
   echo "== $name"
-  python 05_sla_simulation.py --surge 2.5 --gridlock-hub random --fleet-flex "$flex" --out-dir "data/extra_tests/$name" \
+  python 05_sla_simulation.py --surge 2.5 --gridlock-hub random --fleet-flex "$flex" --out-dir "extra_tests/$name" \
     || { echo "!! $name FAILED"; FAILED="$FAILED $name"; }
 done
 python compare_fleet_flex.py

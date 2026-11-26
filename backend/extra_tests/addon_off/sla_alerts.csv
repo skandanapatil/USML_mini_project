@@ -1,0 +1,144 @@
+time,type,hub,message
+18:00:05,P2P_REBALANCE,MH-01,"P2P transfer triggered: rebalance 64 SKUs (e.g. SKU01850) from MH-02 to MH-01; 128 units, arrives 18:28:33"
+18:00:05,P2P_REBALANCE,MH-02,"P2P transfer triggered: rebalance 55 SKUs (e.g. SKU01852) from MH-12 to MH-02; 110 units, arrives 18:19:00"
+18:00:05,P2P_REBALANCE,MH-03,"P2P transfer triggered: rebalance 65 SKUs (e.g. SKU01852) from MH-05 to MH-03; 130 units, arrives 18:20:23"
+18:00:05,P2P_REBALANCE,MH-04,"P2P transfer triggered: rebalance 60 SKUs (e.g. SKU01851) from MH-05 to MH-04; 120 units, arrives 18:29:20"
+18:00:05,P2P_REBALANCE,MH-05,"P2P transfer triggered: rebalance 61 SKUs (e.g. SKU02351) from MH-03 to MH-05; 122 units, arrives 18:20:23"
+18:00:05,P2P_REBALANCE,MH-06,"P2P transfer triggered: rebalance 53 SKUs (e.g. SKU01699) from MH-07 to MH-06; 106 units, arrives 18:18:42"
+18:00:05,P2P_REBALANCE,MH-07,"P2P transfer triggered: rebalance 56 SKUs (e.g. SKU02432) from MH-06 to MH-07; 111 units, arrives 18:18:42"
+18:00:05,P2P_REBALANCE,MH-08,"P2P transfer triggered: rebalance 69 SKUs (e.g. SKU01785) from MH-09 to MH-08; 138 units, arrives 18:40:45"
+18:00:05,P2P_REBALANCE,MH-09,"P2P transfer triggered: rebalance 65 SKUs (e.g. SKU00013) from MH-10 to MH-09; 130 units, arrives 18:22:51"
+18:00:05,P2P_REBALANCE,MH-10,"P2P transfer triggered: rebalance 66 SKUs (e.g. SKU01850) from MH-09 to MH-10; 129 units, arrives 18:22:51"
+18:00:05,P2P_REBALANCE,MH-12,"P2P transfer triggered: rebalance 53 SKUs (e.g. SKU01577) from MH-02 to MH-12; 106 units, arrives 18:19:00"
+18:00:05,P2P_REBALANCE,MH-13,"P2P transfer triggered: rebalance 63 SKUs (e.g. SKU01577) from MH-14 to MH-13; 126 units, arrives 18:18:40"
+18:00:05,P2P_REBALANCE,MH-14,"P2P transfer triggered: rebalance 52 SKUs (e.g. SKU00963) from MH-13 to MH-14; 104 units, arrives 18:18:40"
+18:00:05,P2P_REBALANCE,MH-15,"P2P transfer triggered: rebalance 61 SKUs (e.g. SKU01785) from MH-13 to MH-15; 120 units, arrives 18:22:54"
+18:00:05,P2P_REBALANCE,MH-16,"P2P transfer triggered: rebalance 62 SKUs (e.g. SKU01851) from MH-18 to MH-16; 124 units, arrives 18:22:56"
+18:00:05,P2P_REBALANCE,MH-17,"P2P transfer triggered: rebalance 70 SKUs (e.g. SKU01813) from MH-05 to MH-17; 138 units, arrives 18:26:56"
+18:00:05,P2P_REBALANCE,MH-18,"P2P transfer triggered: rebalance 57 SKUs (e.g. SKU01785) from MH-16 to MH-18; 114 units, arrives 18:22:56"
+18:00:05,P2P_REBALANCE,MH-19,"P2P transfer triggered: rebalance 51 SKUs (e.g. SKU00046) from MH-20 to MH-19; 102 units, arrives 18:22:59"
+18:00:05,P2P_REBALANCE,MH-20,"P2P transfer triggered: rebalance 69 SKUs (e.g. SKU00646) from MH-19 to MH-20; 136 units, arrives 18:22:59"
+18:01:11,REPLENISHMENT,MH-06,"Truck TRK-001 from RDC-1 to MH-06: 1 lines, 2 units (stockout_demand x1); departs 18:09:11, arrives 18:41:34"
+18:01:11,STOCKOUT_SUBSTITUTE,MH-06,"Almond Milk - Unsweetened, Dairy Free [SKU00808] -> margin-optimised alternative Coconut Milk Yogurt - Unsweetened, Dairy Free [SKU00809]"
+18:01:16,ITEM_DROPPED_BY_PREFERENCE,MH-02,Traditional Filter Coffee Decoction [SKU00112] out of stock; customer preference is drop item
+18:01:16,REPLENISHMENT,MH-02,"Truck TRK-002 from RDC-1 to MH-02: 8 lines, 92 units (stockout_demand x1, colocation_kit x7); departs 18:09:16, arrives 18:42:06"
+18:01:17,REPLENISHMENT,MH-15,"Truck TRK-003 from RDC-3 to MH-15: 1 lines, 6 units (stockout_demand x1); departs 18:09:17, arrives 18:23:50"
+18:01:17,STOCKOUT_SUBSTITUTE,MH-15,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+18:03:47,REPLENISHMENT,MH-05,"Truck TRK-004 from RDC-1 to MH-05: 4 lines, 39 units (stockout_demand x1, colocation_kit x3); departs 18:11:47, arrives 18:39:58"
+18:03:47,STOCKOUT_SUBSTITUTE,MH-05,"Peanut Butter With Dark chocolate [SKU01552] -> margin-optimised alternative Peanut Butter - Dark Chocolate, 80% Peanut [SKU01535]"
+18:04:37,REPLENISHMENT,MH-17,"Truck TRK-005 from RDC-4 to MH-17: 10 lines, 136 units (stockout_demand x2, colocation_kit x8); departs 18:12:37, arrives 18:34:59"
+18:04:37,STOCKOUT_SUBSTITUTE,MH-17,Natural Mineral Water [SKU00424] -> margin-optimised alternative Natural Mountain Water - Vedica [SKU00423]
+18:04:47,REPLENISHMENT,MH-09,"Truck TRK-006 from RDC-2 to MH-09: 12 lines, 166 units (stockout_demand x2, colocation_kit x10); departs 18:12:47, arrives 18:38:09"
+18:04:47,STOCKOUT_SUBSTITUTE,MH-09,Banana Milk Shake [SKU00605] -> margin-optimised alternative Coffee Milk Shake [SKU00769]
+18:05:06,REPLENISHMENT,MH-03,"Truck TRK-007 from RDC-1 to MH-03: 7 lines, 92 units (stockout_demand x1, colocation_kit x6); departs 18:13:06, arrives 18:38:18"
+18:05:06,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:05:08,STOCKOUT_SUBSTITUTE,MH-17,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+18:05:26,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:12:05,ITEM_DROPPED_BY_PREFERENCE,MH-19,Apricot - Dried [SKU00872] out of stock; customer preference is drop item
+18:12:05,REPLENISHMENT,MH-19,"Truck TRK-008 from RDC-5 to MH-19: 7 lines, 111 units (stockout_demand x2, colocation_kit x5); departs 18:20:05, arrives 18:35:06"
+18:12:28,STOCKOUT_SOURCING,MH-09,Water-based Electrolyte Drink [SKU00421] sourced from adjacent hub MH-10 (3.26 road km)
+18:13:03,REPLENISHMENT,MH-14,"Truck TRK-009 from RDC-3 to MH-14: 5 lines, 77 units (stockout_demand x1, colocation_kit x4); departs 18:21:03, arrives 18:40:26"
+18:13:03,STOCKOUT_SUBSTITUTE,MH-14,Eggless Pancake Mix [SKU01378] -> margin-optimised alternative Eggless Premium Chocolate Cake Mix [SKU01379]
+18:14:35,REPLENISHMENT,MH-07,"Truck TRK-010 from RDC-1 to MH-07: 1 lines, 7 units (stockout_demand x1); departs 18:22:35, arrives 18:48:22"
+18:14:35,STOCKOUT_SUBSTITUTE,MH-07,Fresho Signature Plain Bread Stick 100G + Happy Chef Pasta Sauce Arrabiata 270G [SKU00438] -> margin-optimised alternative Lavash - Corn [SKU00430]
+18:14:54,REPLENISHMENT,MH-02,"Truck TRK-011 from RDC-1 to MH-02: 7 lines, 136 units (stockout_demand x1, colocation_kit x4, below_reorder_point x2); departs 19:09:16, arrives 19:42:06"
+18:14:54,STOCKOUT_SUBSTITUTE,MH-02,Toffee - Kismi [SKU01243] -> margin-optimised alternative Candy - Melody Chocolaty [SKU01241]
+18:16:21,REPLENISHMENT,MH-04,"Truck TRK-012 from RDC-1 to MH-04: 4 lines, 46 units (stockout_demand x1, colocation_kit x3); departs 18:24:21, arrives 18:47:06"
+18:16:21,STOCKOUT_SUBSTITUTE,MH-04,Ready Mix - Dhoka [SKU01368] -> margin-optimised alternative Easy Mix - Palappam [SKU01354]
+18:16:43,REPLENISHMENT,MH-08,"Truck TRK-013 from RDC-2 to MH-08: 1 lines, 23 units (stockout_demand x1); departs 18:24:43, arrives 18:48:24"
+18:16:43,STOCKOUT_SUBSTITUTE,MH-08,Processed Cheese - Block [SKU00647] -> margin-optimised alternative Processed Slices [SKU00651]
+18:16:58,REPLENISHMENT,MH-09,"Truck TRK-014 from RDC-2 to MH-09: 4 lines, 71 units (stockout_demand x1, colocation_kit x3); departs 19:12:47, arrives 19:38:09"
+18:16:58,STOCKOUT_SUBSTITUTE,MH-09,Seeds - Sabja [SKU02071] -> margin-optimised alternative Certified Organic - Flax Seeds [SKU02048]
+18:18:19,REPLENISHMENT,MH-20,"Truck TRK-015 from RDC-5 to MH-20: 1 lines, 11 units (stockout_demand x1); departs 18:26:19, arrives 18:50:08"
+18:18:19,STOCKOUT_SUBSTITUTE,MH-20,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+18:18:27,STOCKOUT_SUBSTITUTE,MH-17,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+18:19:09,STOCKOUT_SUBSTITUTE,MH-03,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:19:55,STOCKOUT_SUBSTITUTE,MH-19,"Country Cage Free Eggs - Medium, Antibiotic Residue-Free [SKU00826] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+18:23:42,REPLENISHMENT,MH-05,"Truck TRK-016 from RDC-1 to MH-05: 7 lines, 161 units (stockout_demand x2, colocation_kit x5); departs 19:11:47, arrives 19:39:58"
+18:23:42,STOCKOUT_SUBSTITUTE,MH-05,"Banana - Raw, Sliced [SKU00878] -> margin-optimised alternative Coccinia - Sliced [SKU00886]"
+18:23:44,REPLENISHMENT,MH-18,"Truck TRK-017 from RDC-4 to MH-18: 1 lines, 14 units (below_reorder_point x1); departs 18:31:44, arrives 18:48:15"
+18:24:29,REPLENISHMENT,MH-03,"Truck TRK-018 from RDC-1 to MH-03: 17 lines, 300 units (below_reorder_point x2, colocation_kit x14, stockout_demand x1); departs 19:13:06, arrives 19:38:18"
+18:24:55,REPLENISHMENT,MH-19,"Truck TRK-019 from RDC-5 to MH-19: 2 lines, 17 units (stockout_demand x2); departs 19:20:05, arrives 19:35:06"
+18:24:55,STOCKOUT_SUBSTITUTE,MH-19,Probiotic Curd [SKU00728] -> margin-optimised alternative Curd [SKU00724]
+18:32:18,REPLENISHMENT,MH-01,"Truck TRK-020 from RDC-1 to MH-01: 2 lines, 43 units (stockout_demand x2); departs 18:40:18, arrives 19:04:27"
+18:32:18,STOCKOUT_SUBSTITUTE,MH-01,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+18:33:15,REPLENISHMENT,MH-17,"Truck TRK-021 from RDC-4 to MH-17: 12 lines, 187 units (below_reorder_point x4, colocation_kit x7, stockout_demand x1); departs 19:12:37, arrives 19:34:59"
+18:33:41,STOCKOUT_SUBSTITUTE,MH-01,Kool Milk Shake - Badam [SKU00635] -> margin-optimised alternative Kool Milk Shake - Strawberry [SKU00636]
+18:35:38,REPLENISHMENT,MH-15,"Truck TRK-022 from RDC-3 to MH-15: 1 lines, 11 units (below_reorder_point x1); departs 19:09:17, arrives 19:23:50"
+18:41:14,STOCKOUT_SUBSTITUTE,MH-01,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+18:42:00,REPLENISHMENT,MH-18,"Truck TRK-023 from RDC-4 to MH-18: 12 lines, 219 units (below_reorder_point x2, colocation_kit x10); departs 19:31:44, arrives 19:48:15"
+18:44:56,REPLENISHMENT,MH-16,"Truck TRK-024 from RDC-4 to MH-16: 3 lines, 41 units (below_reorder_point x1, colocation_kit x2); departs 18:52:56, arrives 19:13:27"
+18:46:48,REPLENISHMENT,MH-04,"Truck TRK-025 from RDC-1 to MH-04: 1 lines, 9 units (stockout_demand x1); departs 19:24:21, arrives 19:47:06"
+18:46:48,STOCKOUT_SUBSTITUTE,MH-04,Masala Lavash [SKU00431] -> margin-optimised alternative Lavash - Corn [SKU00430]
+18:47:55,ITEM_DROPPED_BY_PREFERENCE,MH-01,Cherry [SKU00861] out of stock; customer preference is drop item
+18:53:58,STOCKOUT_SOURCING,MH-03,Water Plus [SKU00425] sourced from adjacent hub MH-05 (2.8 road km)
+18:54:38,REPLENISHMENT,MH-08,"Truck TRK-026 from RDC-2 to MH-08: 2 lines, 37 units (below_reorder_point x2); departs 19:24:43, arrives 19:48:24"
+18:55:34,STOCKOUT_SUBSTITUTE,MH-17,Natural Mountain Water - Vedica [SKU00423] -> margin-optimised alternative Natural Mineral Water [SKU00424]
+18:57:46,REPLENISHMENT,MH-07,"Truck TRK-027 from RDC-1 to MH-07: 6 lines, 115 units (below_reorder_point x3, colocation_kit x3); departs 19:22:35, arrives 19:48:22"
+18:59:24,STOCKOUT_SUBSTITUTE,MH-17,Alphabytes [SKU00908] -> margin-optimised alternative Chicken Patty - Desi Style [SKU00909]
+19:03:43,ITEM_DROPPED_BY_PREFERENCE,MH-02,Cherry [SKU00861] out of stock; customer preference is drop item
+19:05:28,STOCKOUT_SUBSTITUTE,MH-05,"Farm Eggs - Jumbo, Large, Antibiotic Residue-Free [SKU00828] -> margin-optimised alternative Farm Eggs - Table Tray, Medium, Antibiotic Residue-Free [SKU00829]"
+19:07:20,ITEM_DROPPED_BY_PREFERENCE,MH-19,Probiotic Yogurt - Strawberry [SKU00685] out of stock; customer preference is drop item
+19:11:16,REPLENISHMENT,MH-16,"Truck TRK-028 from RDC-4 to MH-16: 3 lines, 37 units (below_reorder_point x3); departs 19:52:56, arrives 20:13:27"
+19:14:45,REPLENISHMENT,MH-05,"Truck TRK-029 from RDC-1 to MH-05: 13 lines, 180 units (below_reorder_point x2, stockout_demand x1, colocation_kit x10); departs 20:11:47, arrives 20:39:58"
+19:15:00,GRIDLOCK,MH-05,"GRIDLOCK! MH-05 blocked until 19:45:00: rerouting 2 orders -> MH-03 (1), MH-17 (1); 19 orders stayed (no faster option)"
+19:15:04,STOCKOUT_SUBSTITUTE,MH-17,Alphabytes [SKU00908] -> margin-optimised alternative Chicken Patty - Desi Style [SKU00909]
+19:18:31,STOCKOUT_SOURCING,MH-03,Water Plus [SKU00425] sourced from adjacent hub MH-04 (5.67 road km)
+19:19:11,REPLENISHMENT,MH-12,"Truck TRK-030 from RDC-3 to MH-12: 3 lines, 55 units (below_reorder_point x1, colocation_kit x2); departs 19:27:11, arrives 19:58:22"
+19:20:26,REPLENISHMENT,MH-17,"Truck TRK-031 from RDC-4 to MH-17: 7 lines, 88 units (stockout_demand x1, colocation_kit x5, below_reorder_point x1); departs 20:12:37, arrives 20:34:59"
+19:20:26,STOCKOUT_SUBSTITUTE,MH-17,Lia Dua Combi Pack [SKU01082] -> margin-optimised alternative Lia Rainbow Vibran Active Exclusive Fragrance [SKU01083]
+19:23:41,REPLENISHMENT,MH-06,"Truck TRK-032 from RDC-1 to MH-06: 4 lines, 43 units (below_reorder_point x1, colocation_kit x3); departs 19:31:41, arrives 20:04:04"
+19:24:10,REPLENISHMENT,MH-10,"Truck TRK-033 from RDC-2 to MH-10: 1 lines, 15 units (below_reorder_point x1); departs 19:32:10, arrives 20:05:49"
+19:30:36,STOCKOUT_SUBSTITUTE,MH-09,Seeds - Sabja [SKU02071] -> margin-optimised alternative Certified Organic - Flax Seeds [SKU02048]
+19:32:05,STOCKOUT_SUBSTITUTE,MH-17,Natural Mountain Water - Vedica [SKU00423] -> margin-optimised alternative Natural Mineral Water [SKU00424]
+19:32:24,ITEM_DROPPED_BY_PREFERENCE,MH-05,Water Plus [SKU00425] out of stock; customer preference is drop item
+19:33:06,REPLENISHMENT,MH-03,"Truck TRK-034 from RDC-1 to MH-03: 3 lines, 31 units (below_reorder_point x2, stockout_demand x1); departs 20:13:06, arrives 20:38:18"
+19:33:20,REPLENISHMENT,MH-06,"Truck TRK-035 from RDC-1 to MH-06: 15 lines, 219 units (below_reorder_point x2, stockout_demand x3, colocation_kit x10); departs 20:31:41, arrives 21:04:04"
+19:33:43,REPLENISHMENT,MH-10,"Truck TRK-036 from RDC-2 to MH-10: 1 lines, 3 units (stockout_demand x1); departs 20:32:10, arrives 21:05:49"
+19:33:43,STOCKOUT_SUBSTITUTE,MH-10,Pineapple [SKU00874] -> margin-optimised alternative Baby Corn - Unpeeled [SKU00877]
+19:34:29,REPLENISHMENT,MH-04,"Truck TRK-037 from RDC-1 to MH-04: 14 lines, 246 units (stockout_demand x1, colocation_kit x11, below_reorder_point x2); departs 20:24:21, arrives 20:47:06"
+19:34:29,STOCKOUT_SUBSTITUTE,MH-04,Urban Musk Eau De Toilette Deodorant - For Man [SKU01796] -> margin-optimised alternative Man - Green Eau De Toilette Deodorant [SKU01795]
+19:38:36,REPLENISHMENT,MH-20,"Truck TRK-038 from RDC-5 to MH-20: 4 lines, 51 units (below_reorder_point x1, colocation_kit x3); departs 19:46:36, arrives 20:10:25"
+19:47:03,REPLENISHMENT,MH-19,"Truck TRK-039 from RDC-5 to MH-19: 1 lines, 14 units (below_reorder_point x1); departs 20:20:05, arrives 20:35:06"
+19:49:09,REPLENISHMENT,MH-18,"Truck TRK-040 from RDC-4 to MH-18: 1 lines, 27 units (below_reorder_point x1); departs 20:31:44, arrives 20:48:15"
+19:50:22,STOCKOUT_SUBSTITUTE,MH-03,Dairy Whitener [SKU00660] -> margin-optimised alternative Milkmaid Sweetened Condensed Milk [SKU00738]
+19:51:16,REPLENISHMENT,MH-01,"Truck TRK-041 from RDC-1 to MH-01: 11 lines, 216 units (below_reorder_point x1, colocation_kit x10); departs 19:59:16, arrives 20:23:25"
+19:52:42,REPLENISHMENT,MH-14,"Truck TRK-042 from RDC-3 to MH-14: 2 lines, 16 units (below_reorder_point x1, stockout_demand x1); departs 20:00:42, arrives 20:20:05"
+19:52:42,STOCKOUT_SUBSTITUTE,MH-14,Soya Milk - Chocolate [SKU00820] -> margin-optimised alternative Drink - Original [SKU00816]
+19:52:51,REPLENISHMENT,MH-13,"Truck TRK-043 from RDC-3 to MH-13: 10 lines, 158 units (below_reorder_point x1, colocation_kit x8, stockout_demand x1); departs 20:00:51, arrives 20:21:03"
+19:52:51,STOCKOUT_SOURCING,MH-13,Water Plus [SKU00425] sourced from adjacent hub MH-14 (2.49 road km)
+19:58:40,REPLENISHMENT,MH-08,"Truck TRK-044 from RDC-2 to MH-08: 3 lines, 52 units (below_reorder_point x1, colocation_kit x2); departs 20:24:43, arrives 20:48:24"
+20:02:40,ITEM_DROPPED_BY_PREFERENCE,MH-06,Natural Mineral Water [SKU00424] out of stock; customer preference is drop item
+20:02:40,ITEM_DROPPED_BY_PREFERENCE,MH-06,Probiotic Yogurt - Vanilla Bean [SKU00686] out of stock; customer preference is drop item
+20:07:40,REPLENISHMENT,MH-02,"Truck TRK-045 from RDC-1 to MH-02: 5 lines, 52 units (stockout_demand x1, colocation_kit x4); departs 20:15:40, arrives 20:48:30"
+20:07:40,STOCKOUT_SUBSTITUTE,MH-02,Natural Mineral Water [SKU00424] -> margin-optimised alternative Natural Mountain Water - Vedica [SKU00423]
+20:09:02,REPLENISHMENT,MH-16,"Truck TRK-046 from RDC-4 to MH-16: 11 lines, 165 units (stockout_demand x1, colocation_kit x10); departs 20:52:56, arrives 21:13:27"
+20:09:02,STOCKOUT_SUBSTITUTE,MH-16,Natural Mountain Water - Vedica [SKU00423] -> margin-optimised alternative Natural Mineral Water [SKU00424]
+20:11:59,STOCKOUT_SOURCING,MH-05,Water Plus [SKU00425] sourced from adjacent hub MH-03 (2.8 road km)
+20:13:26,REPLENISHMENT,MH-20,"Truck TRK-047 from RDC-5 to MH-20: 1 lines, 24 units (below_reorder_point x1); departs 20:46:36, arrives 21:10:25"
+20:20:37,REPLENISHMENT,MH-03,"Truck TRK-048 from RDC-1 to MH-03: 2 lines, 27 units (stockout_demand x1, below_reorder_point x1); departs 21:13:06, arrives 21:38:18"
+20:20:37,STOCKOUT_SUBSTITUTE,MH-03,Strawberry Milkshake [SKU00677] -> margin-optimised alternative Milkshake - Kaju Butterscoth [SKU00674]
+20:21:36,STOCKOUT_SUBSTITUTE,MH-16,Natural Mountain Water - Vedica [SKU00423] -> margin-optimised alternative Natural Mineral Water [SKU00424]
+20:25:09,REPLENISHMENT,MH-09,"Truck TRK-049 from RDC-2 to MH-09: 1 lines, 15 units (below_reorder_point x1); departs 20:33:09, arrives 20:58:31"
+20:25:55,STOCKOUT_SUBSTITUTE,MH-05,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:29:20,REPLENISHMENT,MH-02,"Truck TRK-050 from RDC-1 to MH-02: 2 lines, 30 units (below_reorder_point x2); departs 21:15:40, arrives 21:48:30"
+20:31:23,STOCKOUT_SOURCING,MH-06,Water Plus [SKU00425] sourced from adjacent hub MH-03 (5.95 road km)
+20:34:21,REPLENISHMENT,MH-10,"Truck TRK-051 from RDC-2 to MH-10: 6 lines, 94 units (below_reorder_point x1, colocation_kit x4, stockout_demand x1); departs 21:32:10, arrives 22:05:49"
+20:36:08,REPLENISHMENT,MH-17,"Truck TRK-052 from RDC-4 to MH-17: 9 lines, 131 units (stockout_demand x2, colocation_kit x6, below_reorder_point x1); departs 21:12:37, arrives 21:34:59"
+20:36:08,STOCKOUT_SUBSTITUTE,MH-17,Probiotic Yogurt - Alphonso Mango [SKU00684] -> margin-optimised alternative Probiotic Yogurt - Strawberry [SKU00685]
+20:37:16,REPLENISHMENT,MH-18,"Truck TRK-053 from RDC-4 to MH-18: 5 lines, 79 units (below_reorder_point x1, colocation_kit x4); departs 21:31:44, arrives 21:48:15"
+20:37:57,REPLENISHMENT,MH-08,"Truck TRK-054 from RDC-2 to MH-08: 2 lines, 32 units (below_reorder_point x2); departs 21:24:43, arrives 21:48:24"
+20:39:46,REPLENISHMENT,MH-05,"Truck TRK-055 from RDC-1 to MH-05: 2 lines, 28 units (stockout_demand x1, below_reorder_point x1); departs 21:11:47, arrives 21:39:58"
+20:39:46,STOCKOUT_SOURCING,MH-05,Water-based Electrolyte Drink [SKU00421] sourced from adjacent hub MH-03 (2.8 road km)
+20:39:46,STOCKOUT_SUBSTITUTE,MH-05,Cherry [SKU00861] -> margin-optimised alternative Plum - Indian [SKU00863]
+20:44:15,REPLENISHMENT,MH-11,"Truck TRK-056 from RDC-2 to MH-11: 1 lines, 15 units (stockout_demand x1); departs 20:52:15, arrives 21:38:02"
+20:44:15,STOCKOUT_SUBSTITUTE,MH-11,"Pav - Safe, Preservative Free [SKU00457] -> margin-optimised alternative Whole Wheat Bread - Safe, Preservative Free [SKU00464]"
+20:44:18,REPLENISHMENT,MH-07,"Truck TRK-057 from RDC-1 to MH-07: 1 lines, 19 units (below_reorder_point x1); departs 20:52:18, arrives 21:18:05"
+20:48:32,REPLENISHMENT,MH-12,"Truck TRK-058 from RDC-3 to MH-12: 12 lines, 166 units (below_reorder_point x2, colocation_kit x10); departs 20:56:32, arrives 21:27:43"
+20:50:36,REPLENISHMENT,MH-09,"Truck TRK-059 from RDC-2 to MH-09: 3 lines, 42 units (below_reorder_point x1, colocation_kit x1, stockout_demand x1); departs 21:33:09, arrives 21:58:31"
+20:51:56,ITEM_DROPPED_BY_PREFERENCE,MH-10,Butter Crunch Cookies [SKU00589] out of stock; customer preference is drop item
+20:53:12,ITEM_DROPPED_BY_PREFERENCE,MH-09,Vegan Pineapple Cake [SKU00807] out of stock; customer preference is drop item
+20:53:25,REPLENISHMENT,MH-04,"Truck TRK-060 from RDC-1 to MH-04: 1 lines, 14 units (below_reorder_point x1); departs 21:24:21, arrives 21:47:06"
+20:53:51,ITEM_DROPPED_BY_PREFERENCE,MH-17,Duck Eggs [SKU00827] out of stock; customer preference is drop item
+20:56:13,REPLENISHMENT,MH-01,"Truck TRK-061 from RDC-1 to MH-01: 10 lines, 144 units (below_reorder_point x1, colocation_kit x8, stockout_demand x1); departs 21:04:13, arrives 21:28:22"
+20:56:13,STOCKOUT_SOURCING,MH-01,Water Plus [SKU00425] sourced from adjacent hub MH-02 (4.3 road km)

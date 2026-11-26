@@ -37,7 +37,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-DATA_DIR = Path(__file__).resolve().parent / "data"
+# Same folders as quickcommerce_data_prep.py
+RAW_DIR = Path(r"E:\USML_mini_project\dataset")
+DATA_DIR = Path(r"E:\USML_mini_project\backend\data")
 from scipy.spatial import ConvexHull
 from sklearn.cluster import AgglomerativeClustering, DBSCAN, KMeans
 from sklearn.metrics import silhouette_score
